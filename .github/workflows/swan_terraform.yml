@@ -11,6 +11,7 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_swan_region: "ap-southeast-1"
 
 jobs:
   swan_terraform_plan:
@@ -68,4 +69,4 @@ jobs:
           path: swan_terraform/swan_environments/swan_production
 
       - name: Terraform Apply
-        run: terraform apply -input=false swan_tfplan
+        run: terraform apply -auto-approve -input=false swan_tfplan
