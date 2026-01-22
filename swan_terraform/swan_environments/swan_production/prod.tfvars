@@ -1,0 +1,1 @@
+swan_region = "ap-southeast-1"
