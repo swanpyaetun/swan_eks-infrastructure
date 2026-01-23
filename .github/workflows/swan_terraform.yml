@@ -35,7 +35,7 @@ jobs:
           restore-keys: terraform-providers-${{ runner.os }}-
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init -input=false -upgrade
 
       - name: Terraform Format Check
         run: terraform fmt -check -diff
@@ -78,7 +78,7 @@ jobs:
           restore-keys: terraform-providers-${{ runner.os }}-
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init -input=false -upgrade
 
       - name: Download Terraform Plan Artifact
         uses: actions/download-artifact@v7

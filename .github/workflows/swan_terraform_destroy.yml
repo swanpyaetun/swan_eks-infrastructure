@@ -33,7 +33,7 @@ jobs:
           restore-keys: terraform-providers-${{ runner.os }}-
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init -input=false -upgrade
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve -input=false -var-file=prod.tfvars
