@@ -75,7 +75,7 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: swan_tfplan
-          path: .
+          path: swan_terraform/swan_environments/swan_production
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -input=false swan_tfplan
