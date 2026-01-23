@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: swan_tfplan
-          path: swan_tfplan
+          path: swan_terraform/swan_environments/swan_production/swan_tfplan
 
   swan_terraform_apply:
     name: Terraform Apply
