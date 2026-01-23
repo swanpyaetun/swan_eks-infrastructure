@@ -2,21 +2,16 @@ name: Terraform Destroy
 
 on:
   workflow_dispatch:
-    inputs:
-      swan_confirm_destroy:
-        description: 'Type "DESTROY" to confirm'
-        required: true
-        type: string
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform-plugin-cache
 
 jobs:
   swan_terraform_destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
-    if: github.event.inputs.swan_confirm_destroy == 'DESTROY'
     defaults:
       run:
         working-directory: swan_terraform/swan_environments/swan_production
@@ -26,9 +21,19 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.3
+
+      - name: Cache Terraform provider plugins
+        uses: actions/cache@v5
+        with:
+          path: ${{ github.workspace }}/.terraform-plugin-cache
+          key: terraform-providers-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-providers-${{ runner.os }}-
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init -input=false -lockfile=readonly
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve -input=false -var-file=prod.tfvars
