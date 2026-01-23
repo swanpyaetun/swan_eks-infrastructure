@@ -28,9 +28,7 @@ jobs:
       - name: Cache Terraform providers
         uses: actions/cache@v5
         with:
-          path: |
-            swan_terraform/swan_environments/swan_production/.terraform/providers
-            swan_terraform/swan_environments/swan_production/.terraform.lock.hcl
+          path: swan_terraform/swan_environments/swan_production/.terraform/providers
           key: terraform-providers-${{ runner.os }}-${{ hashFiles('swan_terraform/swan_environments/swan_production/**/*.tf') }}
           restore-keys: terraform-providers-${{ runner.os }}-
 
@@ -71,9 +69,7 @@ jobs:
       - name: Cache Terraform providers
         uses: actions/cache@v5
         with:
-          path: |
-            swan_terraform/swan_environments/swan_production/.terraform/providers
-            swan_terraform/swan_environments/swan_production/.terraform.lock.hcl
+          path: swan_terraform/swan_environments/swan_production/.terraform/providers
           key: terraform-providers-${{ runner.os }}-${{ hashFiles('swan_terraform/swan_environments/swan_production/**/*.tf') }}
           restore-keys: terraform-providers-${{ runner.os }}-
 
