@@ -60,6 +60,7 @@ jobs:
 
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v6
+        if: github.event_name == 'push'
         with:
           name: swan_tfplan
           path: swan_terraform/swan_environments/swan_production/swan_tfplan
