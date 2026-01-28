@@ -6,6 +6,7 @@ on:
 env:
   SWAN_TERRAFORM_VERSION: 1.14.3
   SWAN_AWS_REGION: "ap-southeast-1"
+  TF_VAR_swan_aws_account_id: ${{ secrets.SWAN_AWS_ACCOUNT_ID }}
 
 permissions:
   id-token: write # id-token write permission is needed to use OIDC

@@ -22,3 +22,8 @@ variable "swan_eks_node_groups" {
     })
   }))
 }
+
+variable "swan_aws_account_id" {
+  type      = string
+  sensitive = true
+}
