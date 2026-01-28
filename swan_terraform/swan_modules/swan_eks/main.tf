@@ -27,6 +27,11 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
     subnet_ids = var.swan_private_subnet_ids
   }
 
+  access_config {
+    authentication_mode                         = "API"
+    bootstrap_cluster_creator_admin_permissions = true
+  }
+
   depends_on = [
     aws_iam_role_policy_attachment.swan_eks_cluster_role_policy_attachment
   ]
