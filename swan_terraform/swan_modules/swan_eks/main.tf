@@ -1,3 +1,4 @@
+# EKS Cluster IAM Role
 resource "aws_iam_role" "swan_eks_cluster_role" {
   name = "${var.swan_eks_cluster_name}-swan_eks_cluster_role"
 
@@ -18,6 +19,18 @@ resource "aws_iam_role_policy_attachment" "swan_eks_cluster_role_policy_attachme
   role       = aws_iam_role.swan_eks_cluster_role.name
 }
 
+# KMS key for EKS secrets encryption in etcd
+resource "aws_kms_key" "swan_kms_key" {
+  description             = "KMS key for EKS cluster ${var.swan_eks_cluster_name} secrets encryption in etcd"
+  enable_key_rotation     = true
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${var.swan_eks_cluster_name}-swan_kms_key"
+  }
+}
+
+# EKS Cluster
 resource "aws_eks_cluster" "swan_eks_cluster" {
   name     = var.swan_eks_cluster_name
   role_arn = aws_iam_role.swan_eks_cluster_role.arn
@@ -25,6 +38,13 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
 
   vpc_config {
     subnet_ids = var.swan_private_subnet_ids
+  }
+
+  encryption_config {
+    provider {
+      key_arn = aws_kms_key.swan_kms_key.arn
+    }
+    resources = ["secrets"]
   }
 
   access_config {
@@ -37,6 +57,7 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
   ]
 }
 
+# EKS Node Groups IAM Role
 resource "aws_iam_role" "swan_eks_node_role" {
   name = "${var.swan_eks_cluster_name}-swan_eks_node_role"
 
@@ -63,6 +84,7 @@ resource "aws_iam_role_policy_attachment" "swan_eks_node_role_policy_attachment"
   role       = aws_iam_role.swan_eks_node_role.name
 }
 
+# EKS Node Groups
 resource "aws_eks_node_group" "swan_eks_node_groups" {
   for_each        = var.swan_eks_node_groups
   cluster_name    = aws_eks_cluster.swan_eks_cluster.name
@@ -83,8 +105,9 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
   ]
 }
 
-resource "aws_iam_role" "swan_eks_admin_role" {
-  name = "swan_eks_admin_role"
+# EKS Cluster Admin IAM Role
+resource "aws_iam_role" "swan_eks_cluster_admin_role" {
+  name = "${var.swan_eks_cluster_name}-swan_eks_cluster_admin_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -100,14 +123,14 @@ resource "aws_iam_role" "swan_eks_admin_role" {
 
 resource "aws_eks_access_entry" "swan_eks_access_entry" {
   cluster_name  = aws_eks_cluster.swan_eks_cluster.name
-  principal_arn = aws_iam_role.swan_eks_admin_role.arn
+  principal_arn = aws_iam_role.swan_eks_cluster_admin_role.arn
   type          = "STANDARD"
 }
 
 resource "aws_eks_access_policy_association" "swan_eks_access_policy_association" {
   cluster_name  = aws_eks_cluster.swan_eks_cluster.name
   policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-  principal_arn = aws_iam_role.swan_eks_admin_role.arn
+  principal_arn = aws_iam_role.swan_eks_cluster_admin_role.arn
   access_scope {
     type = "cluster"
   }

@@ -11,7 +11,6 @@ variable "swan_private_subnet_ids" {
 }
 
 variable "swan_eks_node_groups" {
-  description = "EKS node groups configuration"
   type = map(object({
     instance_types = list(string)
     capacity_type  = string

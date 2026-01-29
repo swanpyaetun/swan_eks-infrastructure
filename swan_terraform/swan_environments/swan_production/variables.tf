@@ -10,6 +10,15 @@ variable "swan_private_subnet_cidr_blocks" {
   type = list(string)
 }
 
+variable "swan_availability_zones" {
+  type = list(string)
+}
+
+variable "swan_private_subnet_tags" {
+  type    = map(string)
+  default = {}
+}
+
 variable "swan_eks_cluster_name" {
   type = string
 }
@@ -19,7 +28,6 @@ variable "swan_eks_cluster_version" {
 }
 
 variable "swan_eks_node_groups" {
-  description = "EKS node groups configuration"
   type = map(object({
     instance_types = list(string)
     capacity_type  = string

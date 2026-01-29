@@ -2,7 +2,9 @@ module "swan_vpc" {
   source                          = "../../swan_modules/swan_vpc"
   swan_vpc_cidr_block             = var.swan_vpc_cidr_block
   swan_private_subnet_cidr_blocks = var.swan_private_subnet_cidr_blocks
-  swan_eks_cluster_name           = var.swan_eks_cluster_name
+  swan_availability_zones         = var.swan_availability_zones
+  swan_private_subnet_tags        = var.swan_private_subnet_tags
+  swan_name_prefix                = var.swan_eks_cluster_name
 }
 
 module "swan_eks" {
