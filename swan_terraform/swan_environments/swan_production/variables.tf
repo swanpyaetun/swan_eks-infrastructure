@@ -36,13 +36,11 @@ variable "swan_eks_node_groups" {
       min_size     = number
       max_size     = number
     })
-    labels = optional(map(string))
     taints = optional(list(object({
       key    = string
       value  = string
       effect = string
     })))
-    tags = optional(map(string))
   }))
 }
 

@@ -31,11 +31,5 @@ swan_eks_node_groups = {
       min_size     = 1
       max_size     = 2
     }
-    labels = {
-      capacity_type = "spot"
-    }
-    tags = {
-      NodeGroup = "spot"
-    }
   }
 }

@@ -103,8 +103,6 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
     max_size     = each.value.scaling_config.max_size
   }
 
-  labels = lookup(each.value, "labels", {})
-
   dynamic "taint" {
     for_each = coalesce(lookup(each.value, "taints", null), [])
     content {
@@ -113,8 +111,6 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
       effect = taint.value.effect
     }
   }
-
-  tags = lookup(each.value, "tags", {})
 
   depends_on = [
     aws_iam_role_policy_attachment.swan_eks_node_role_policy_attachment
