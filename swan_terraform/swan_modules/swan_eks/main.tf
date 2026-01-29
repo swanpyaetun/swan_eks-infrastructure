@@ -24,10 +24,11 @@ resource "aws_kms_key" "swan_kms_key" {
   description             = "KMS key for EKS cluster ${var.swan_eks_cluster_name} secrets encryption in etcd"
   enable_key_rotation     = true
   deletion_window_in_days = 7
+}
 
-  tags = {
-    Name = "${var.swan_eks_cluster_name}-swan_kms_key"
-  }
+resource "aws_kms_alias" "swan_kms_alias" {
+  name          = "alias/${var.swan_eks_cluster_name}-swan_kms_key"
+  target_key_id = aws_kms_key.swan_kms_key.key_id
 }
 
 # EKS Cluster
@@ -37,7 +38,9 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
   version  = var.swan_eks_cluster_version
 
   vpc_config {
-    subnet_ids = var.swan_private_subnet_ids
+    subnet_ids              = var.swan_private_subnet_ids
+    endpoint_private_access = true
+    endpoint_public_access  = true
   }
 
   encryption_config {
@@ -92,7 +95,7 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
   node_role_arn   = aws_iam_role.swan_eks_node_role.arn
   subnet_ids      = var.swan_private_subnet_ids
   instance_types  = each.value.instance_types
-  capacity_type   = each.value.capacity_type
+  capacity_type   = lookup(each.value, "capacity_type", "ON_DEMAND")
 
   scaling_config {
     desired_size = each.value.scaling_config.desired_size
@@ -100,9 +103,26 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
     max_size     = each.value.scaling_config.max_size
   }
 
+  labels = lookup(each.value, "labels", {})
+
+  dynamic "taint" {
+    for_each = coalesce(lookup(each.value, "taints", null), [])
+    content {
+      key    = taint.value.key
+      value  = taint.value.value
+      effect = taint.value.effect
+    }
+  }
+
+  tags = lookup(each.value, "tags", {})
+
   depends_on = [
     aws_iam_role_policy_attachment.swan_eks_node_role_policy_attachment
   ]
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 }
 
 # EKS Cluster Admin IAM Role

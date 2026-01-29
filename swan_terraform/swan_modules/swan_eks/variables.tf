@@ -13,12 +13,19 @@ variable "swan_private_subnet_ids" {
 variable "swan_eks_node_groups" {
   type = map(object({
     instance_types = list(string)
-    capacity_type  = string
+    capacity_type  = optional(string)
     scaling_config = object({
       desired_size = number
       min_size     = number
       max_size     = number
     })
+    labels = optional(map(string))
+    taints = optional(list(object({
+      key    = string
+      value  = string
+      effect = string
+    })))
+    tags = optional(map(string))
   }))
 }
 
