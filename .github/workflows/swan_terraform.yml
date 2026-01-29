@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   SWAN_TERRAFORM_VERSION: 1.14.3
@@ -61,7 +62,7 @@ jobs:
 
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v6
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         with:
           name: swan_tfplan
           path: swan_terraform/swan_environments/swan_production/swan_tfplan
@@ -70,7 +71,7 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
     needs: swan_terraform_plan
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     defaults:
       run:
         working-directory: swan_terraform/swan_environments/swan_production
