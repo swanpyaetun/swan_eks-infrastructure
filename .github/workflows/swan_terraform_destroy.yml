@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  SWAN_AWS_REGION: "ap-southeast-1"
   TF_VAR_swan_aws_account_id: ${{ secrets.SWAN_AWS_ACCOUNT_ID }}
 
 permissions:
@@ -36,6 +37,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v5.1.1
         with:
           role-to-assume: ${{ secrets.SWAN_AWS_IAM_ROLE }}
+          aws-region: ${{ env.SWAN_AWS_REGION }}
 
       - name: Terraform Init
         run: terraform init -input=false -upgrade
