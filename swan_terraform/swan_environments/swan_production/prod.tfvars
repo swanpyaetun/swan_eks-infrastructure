@@ -16,12 +16,6 @@ swan_eks_node_groups = {
       min_size     = 1
       max_size     = 2
     }
-    labels = {
-      capacity_type = "ondemand"
-    }
-    tags = {
-      NodeGroup = "ondemand"
-    }
   }
   swan_spot_nodegroup = {
     instance_types = ["t3.medium"]
