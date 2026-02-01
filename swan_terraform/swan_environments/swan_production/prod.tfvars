@@ -1,7 +1,11 @@
-swan_region                     = "ap-southeast-1"
-swan_vpc_cidr_block             = "10.0.0.0/16"
-swan_private_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-swan_availability_zones         = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+swan_region                    = "ap-southeast-1"
+swan_vpc_cidr_block            = "10.0.0.0/16"
+swan_availability_zones        = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+swan_public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+swan_public_subnet_tags = {
+  "kubernetes.io/role/elb" = "1"
+}
+swan_private_subnet_cidr_blocks = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
 swan_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = "1"
 }
