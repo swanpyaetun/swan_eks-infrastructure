@@ -8,7 +8,7 @@ resource "helm_release" "swan_lbc_helm_release" {
   set = [
     {
       name  = "clusterName"
-      value = aws_eks_cluster.swan_eks_cluster.name
+      value = var.swan_eks_cluster_name
       }, {
       name  = "serviceAccount.name"
       value = "aws-load-balancer-controller"
@@ -19,7 +19,7 @@ resource "helm_release" "swan_lbc_helm_release" {
 }
 
 resource "aws_iam_role" "swan_lbc_role" {
-  name = "${aws_eks_cluster.swan_eks_cluster.name}-swan_lbc_role"
+  name = "${var.swan_eks_cluster_name}-swan_lbc_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -46,7 +46,7 @@ resource "aws_iam_role_policy_attachment" "swan_lbc_role_policy_attachment" {
 }
 
 resource "aws_eks_pod_identity_association" "swan_lbc_pod_identity_association" {
-  cluster_name    = aws_eks_cluster.swan_eks_cluster.name
+  cluster_name    = var.swan_eks_cluster_name
   namespace       = "kube-system"
   service_account = "aws-load-balancer-controller"
   role_arn        = aws_iam_role.swan_lbc_role.arn

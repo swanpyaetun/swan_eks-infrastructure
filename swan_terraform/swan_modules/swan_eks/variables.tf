@@ -6,10 +6,6 @@ variable "swan_eks_cluster_version" {
   type = string
 }
 
-variable "swan_vpc_id" {
-  type = string
-}
-
 variable "swan_private_subnet_ids" {
   type = list(string)
 }
