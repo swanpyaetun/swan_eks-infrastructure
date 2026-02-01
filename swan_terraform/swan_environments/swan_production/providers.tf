@@ -24,8 +24,8 @@ provider "aws" {
 }
 
 data "aws_eks_cluster" "swan_eks_cluster" {
-  name = module.swan_eks.swan_eks_cluster_name
-  depends_on = [ module.swan_eks ]
+  name       = module.swan_eks.swan_eks_cluster_name
+  depends_on = [module.swan_eks]
 }
 
 data "aws_eks_cluster_auth" "swan_eks_cluster_auth" {
