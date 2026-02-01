@@ -19,18 +19,6 @@ resource "aws_iam_role_policy_attachment" "swan_eks_cluster_role_policy_attachme
   role       = aws_iam_role.swan_eks_cluster_role.name
 }
 
-# KMS key for EKS secrets encryption in etcd
-resource "aws_kms_key" "swan_kms_key" {
-  description             = "KMS key for EKS cluster ${var.swan_eks_cluster_name} secrets encryption in etcd"
-  enable_key_rotation     = true
-  deletion_window_in_days = 7
-}
-
-resource "aws_kms_alias" "swan_kms_alias" {
-  name          = "alias/${var.swan_eks_cluster_name}-swan_kms_key"
-  target_key_id = aws_kms_key.swan_kms_key.key_id
-}
-
 # EKS Cluster
 resource "aws_eks_cluster" "swan_eks_cluster" {
   name     = var.swan_eks_cluster_name
@@ -41,13 +29,6 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
     subnet_ids              = var.swan_private_subnet_ids
     endpoint_private_access = true
     endpoint_public_access  = true
-  }
-
-  encryption_config {
-    provider {
-      key_arn = aws_kms_key.swan_kms_key.arn
-    }
-    resources = ["secrets"]
   }
 
   access_config {
