@@ -37,7 +37,7 @@ resource "aws_iam_role" "swan_lbc_role" {
 
 resource "aws_iam_policy" "swan_lbc_policy" {
   name   = "AWSLoadBalancerControllerIAMPolicy"
-  policy = file("AWSLoadBalancerControllerIAMPolicy.json")
+  policy = file("./AWSLoadBalancerControllerIAMPolicy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "swan_lbc_role_policy_attachment" {
