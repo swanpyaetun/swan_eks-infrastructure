@@ -24,11 +24,11 @@ provider "aws" {
 }
 
 data "aws_eks_cluster" "swan_eks_cluster" {
-  name = module.swan_eks.swan_eks_cluster_name
+  name = var.swan_eks_cluster_name
 }
 
 data "aws_eks_cluster_auth" "swan_eks_cluster_auth" {
-  name = module.swan_eks.swan_eks_cluster_name
+  name = var.swan_eks_cluster_name
 }
 
 provider "helm" {
