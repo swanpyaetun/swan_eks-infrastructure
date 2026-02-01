@@ -7,6 +7,11 @@ swan_private_subnet_tags = {
 }
 swan_eks_cluster_name    = "swan_production_eks_cluster"
 swan_eks_cluster_version = "1.35"
+swan_eks_addons = {
+  eks-pod-identity-agent = {
+    addon_version = "v1.3.10-eksbuild.2"
+  }
+}
 swan_eks_node_groups = {
   swan_ondemand_nodegroup = {
     instance_types = ["t3.medium"]
