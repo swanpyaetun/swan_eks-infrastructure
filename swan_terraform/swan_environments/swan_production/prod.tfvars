@@ -5,7 +5,7 @@ swan_public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 swan_public_subnet_tags = {
   "kubernetes.io/role/elb" = "1"
 }
-swan_private_subnet_cidr_blocks = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+swan_private_subnet_cidr_blocks = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
 swan_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = "1"
 }
@@ -30,7 +30,7 @@ swan_eks_node_groups = {
     instance_types = ["t3.medium"]
     capacity_type  = "SPOT"
     scaling_config = {
-      desired_size = 2
+      desired_size = 1
       min_size     = 1
       max_size     = 2
     }
