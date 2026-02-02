@@ -97,5 +97,4 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
   depends_on = [
     aws_iam_role_policy_attachment.swan_eks_node_role_policy_attachment
   ]
-
 }
