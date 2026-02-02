@@ -28,7 +28,12 @@ variable "swan_eks_node_groups" {
   }))
 }
 
-variable "swan_aws_account_id" {
+variable "swan_ci_role_arn" {
+  type      = string
+  sensitive = true
+}
+
+variable "swan_user_arn" {
   type      = string
   sensitive = true
 }

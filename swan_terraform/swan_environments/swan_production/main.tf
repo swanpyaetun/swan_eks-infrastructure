@@ -16,7 +16,8 @@ module "swan_eks" {
   swan_private_subnet_ids  = module.swan_vpc.swan_private_subnet_ids
   swan_eks_addons          = var.swan_eks_addons
   swan_eks_node_groups     = var.swan_eks_node_groups
-  swan_aws_account_id      = var.swan_aws_account_id
+  swan_ci_role_arn         = var.swan_ci_role_arn
+  swan_user_arn            = var.swan_user_arn
 }
 
 module "swan_aws_load_balancer_controller" {
