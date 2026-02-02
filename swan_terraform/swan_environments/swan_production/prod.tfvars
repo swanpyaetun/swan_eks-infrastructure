@@ -21,18 +21,18 @@ swan_eks_node_groups = {
     instance_types = ["t3.medium"]
     capacity_type  = "ON_DEMAND"
     scaling_config = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 2
+      desired_size = 0
+      min_size     = 0
+      max_size     = 1
     }
   }
   swan_spot_nodegroup = {
-    instance_types = ["t3.medium"]
+    instance_types = ["m5.large"]
     capacity_type  = "SPOT"
     scaling_config = {
       desired_size = 1
       min_size     = 1
-      max_size     = 2
+      max_size     = 1
     }
   }
 }
