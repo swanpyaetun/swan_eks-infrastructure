@@ -23,19 +23,10 @@ provider "aws" {
   }
 }
 
-data "aws_eks_cluster" "swan_eks_cluster" {
-  name       = var.swan_eks_cluster_name
-  depends_on = [module.swan_eks]
-}
-
-data "aws_eks_cluster_auth" "swan_eks_cluster_auth" {
-  name = var.swan_eks_cluster_name
-}
-
 provider "helm" {
   kubernetes = {
-    host                   = data.aws_eks_cluster.swan_eks_cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.swan_eks_cluster.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.swan_eks_cluster_auth.token
+    host                   = module.swan_eks.swan_eks_cluster_endpoint
+    cluster_ca_certificate = base64decode(module.swan_eks.swan_eks_cluster_certificate_authority_data)
+    token                  = module.swan_eks.swan_eks_cluster_auth_token
   }
 }
