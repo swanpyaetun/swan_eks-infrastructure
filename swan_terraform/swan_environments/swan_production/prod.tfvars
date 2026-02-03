@@ -11,11 +11,12 @@ swan_private_subnet_tags = {
 }
 swan_eks_cluster_name    = "swan_production_eks_cluster"
 swan_eks_cluster_version = "1.35"
-swan_eks_addons = {
-  eks-pod-identity-agent = {
+swan_eks_addons = [
+  {
+    addon_name    = "eks-pod-identity-agent"
     addon_version = "v1.3.10-eksbuild.2"
   }
-}
+]
 swan_eks_node_groups = {
   swan_ondemand_nodegroup = {
     instance_types = ["t3.medium"]
@@ -36,3 +37,28 @@ swan_eks_node_groups = {
     }
   }
 }
+swan_ecr_namespace = "swan_polyglot-microservices-application"
+swan_ecr_repository_names = [
+  "accounting",
+  "ad",
+  "cart",
+  "checkout",
+  "currency",
+  "email",
+  "flagd",
+  "fraud-detection",
+  "frontend",
+  "frontend-proxy",
+  "image-provider",
+  "kafka",
+  "llm",
+  "load-generator",
+  "payment",
+  "postgresql",
+  "product-catalog",
+  "product-reviews",
+  "quote",
+  "recommendation",
+  "shipping",
+  "valkey-cart"
+]

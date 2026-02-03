@@ -37,7 +37,8 @@ variable "swan_eks_cluster_version" {
 }
 
 variable "swan_eks_addons" {
-  type = map(object({
+  type = list(object({
+    addon_name    = string
     addon_version = string
   }))
 }
@@ -62,4 +63,12 @@ variable "swan_ci_role_arn" {
 variable "swan_user_arn" {
   type      = string
   sensitive = true
+}
+
+variable "swan_ecr_namespace" {
+  type = string
+}
+
+variable "swan_ecr_repository_names" {
+  type = list(string)
 }

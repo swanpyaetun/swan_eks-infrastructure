@@ -26,3 +26,9 @@ module "swan_aws_load_balancer_controller" {
   swan_vpc_id           = module.swan_vpc.swan_vpc_id
   depends_on            = [module.swan_eks]
 }
+
+module "swan_ecr" {
+  source                    = "../../swan_modules/swan_ecr"
+  swan_ecr_namespace        = var.swan_ecr_namespace
+  swan_ecr_repository_names = var.swan_ecr_repository_names
+}
