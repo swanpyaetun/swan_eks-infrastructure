@@ -13,9 +13,10 @@ resource "aws_ecr_lifecycle_policy" "swan_ecr_lifecycle_policy" {
         rulePriority = 1,
         description  = "Keep last 30 images",
         selection = {
-          tagStatus   = "tagged",
-          countType   = "imageCountMoreThan",
-          countNumber = 30
+          tagStatus     = "tagged",
+          tagPrefixList = [""],
+          countType     = "imageCountMoreThan",
+          countNumber   = 30
         },
         action = {
           type = "expire"
