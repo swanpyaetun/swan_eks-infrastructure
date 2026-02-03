@@ -32,7 +32,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.SWAN_CI_ROLE_ARN }}
           aws-region: ${{ env.SWAN_AWS_REGION }}
@@ -72,7 +72,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.SWAN_CI_ROLE_ARN }}
           aws-region: ${{ env.SWAN_AWS_REGION }}
