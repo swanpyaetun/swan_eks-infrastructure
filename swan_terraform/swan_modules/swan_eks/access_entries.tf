@@ -23,7 +23,7 @@ resource "aws_iam_role" "swan_eks_cluster_admin_role" {
     Statement = [{
       Effect = "Allow"
       Principal = {
-        AWS = "${var.swan_user_arn}"
+        AWS = "${var.swan_eks_cluster_admin_user_arn}"
       }
       Action = "sts:AssumeRole"
     }]

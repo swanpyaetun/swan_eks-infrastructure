@@ -34,7 +34,7 @@ variable "swan_ci_role_arn" {
   sensitive = true
 }
 
-variable "swan_user_arn" {
+variable "swan_eks_cluster_admin_user_arn" {
   type      = string
   sensitive = true
 }

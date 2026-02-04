@@ -10,20 +10,28 @@ module "swan_vpc" {
 }
 
 module "swan_eks" {
-  source                   = "../../swan_modules/swan_eks"
-  swan_eks_cluster_name    = var.swan_eks_cluster_name
-  swan_eks_cluster_version = var.swan_eks_cluster_version
-  swan_private_subnet_ids  = module.swan_vpc.swan_private_subnet_ids
-  swan_eks_addons          = var.swan_eks_addons
-  swan_eks_node_groups     = var.swan_eks_node_groups
-  swan_ci_role_arn         = var.swan_ci_role_arn
-  swan_user_arn            = var.swan_user_arn
+  source                          = "../../swan_modules/swan_eks"
+  swan_eks_cluster_name           = var.swan_eks_cluster_name
+  swan_eks_cluster_version        = var.swan_eks_cluster_version
+  swan_private_subnet_ids         = module.swan_vpc.swan_private_subnet_ids
+  swan_eks_addons                 = var.swan_eks_addons
+  swan_eks_node_groups            = var.swan_eks_node_groups
+  swan_ci_role_arn                = var.swan_ci_role_arn
+  swan_eks_cluster_admin_user_arn = var.swan_eks_cluster_admin_user_arn
 }
 
 module "swan_aws_load_balancer_controller" {
   source                = "../../swan_modules/swan_aws_load_balancer_controller"
   swan_eks_cluster_name = var.swan_eks_cluster_name
   swan_vpc_id           = module.swan_vpc.swan_vpc_id
+  depends_on            = [module.swan_eks]
+}
+
+module "swan_argocd" {
+  source                = "../../swan_modules/swan_argocd"
+  swan_aws_region       = var.swan_aws_region
+  swan_ecr_registry     = var.swan_ecr_registry
+  swan_eks_cluster_name = var.swan_eks_cluster_name
   depends_on            = [module.swan_eks]
 }
 

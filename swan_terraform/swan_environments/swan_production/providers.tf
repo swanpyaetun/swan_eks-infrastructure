@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.swan_region
+  region = var.swan_aws_region
   default_tags {
     tags = {
       ManagedBy   = "Terraform"
