@@ -54,11 +54,9 @@ swan_ecr_repository_names = [
   "llm",
   "load-generator",
   "payment",
-  "postgresql",
   "product-catalog",
   "product-reviews",
   "quote",
   "recommendation",
-  "shipping",
-  "valkey-cart"
+  "shipping"
 ]
