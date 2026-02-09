@@ -23,19 +23,16 @@ swan_eks_addons = [
     }
   },
   {
-    addon_name           = "coredns"
-    addon_version        = "v1.13.2-eksbuild.1"
-    configuration_values = null
+    addon_name    = "coredns"
+    addon_version = "v1.13.2-eksbuild.1"
   },
   {
-    addon_name           = "kube-proxy"
-    addon_version        = "v1.35.0-eksbuild.2"
-    configuration_values = null
+    addon_name    = "kube-proxy"
+    addon_version = "v1.35.0-eksbuild.2"
   },
   {
-    addon_name           = "eks-pod-identity-agent"
-    addon_version        = "v1.3.10-eksbuild.2"
-    configuration_values = null
+    addon_name    = "eks-pod-identity-agent"
+    addon_version = "v1.3.10-eksbuild.2"
   }
 ]
 swan_eks_node_groups = {
