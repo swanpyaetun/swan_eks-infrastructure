@@ -49,7 +49,7 @@ resource "aws_eks_addon" "swan_eks_addons" {
   addon_version               = each.value.addon_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  configuration_values        = jsonencode(each.value.configuration_values)
+  configuration_values        = contains(keys(each.value), "configuration_values") && each.value.configuration_values != null ? jsonencode(each.value.configuration_values) : null
 }
 
 # EKS Node Groups IAM Role
