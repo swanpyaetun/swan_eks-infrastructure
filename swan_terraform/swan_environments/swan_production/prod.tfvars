@@ -15,12 +15,12 @@ swan_eks_addons = [
   {
     addon_name    = "vpc-cni",
     addon_version = "v1.21.1-eksbuild.3"
-    configuration_values = jsonencode({
+    configuration_values = {
       enableNetworkPolicy = "true"
       env = {
         ENABLE_PREFIX_DELEGATION = "true"
       }
-    })
+    }
   },
   {
     addon_name    = "coredns"
