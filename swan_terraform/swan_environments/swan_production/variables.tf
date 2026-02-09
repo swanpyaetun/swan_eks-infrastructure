@@ -40,7 +40,7 @@ variable "swan_eks_addons" {
   type = list(object({
     addon_name           = string
     addon_version        = string
-    configuration_values = optional(map(any))
+    configuration_values = map(any)
   }))
 }
 
