@@ -43,13 +43,13 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
 
 # EKS add-ons
 resource "aws_eks_addon" "swan_eks_addons" {
-  for_each                    = { for addon in var.swan_eks_addons : addon.addon_name => addon }
+  for_each                    = var.swan_eks_addons
   cluster_name                = aws_eks_cluster.swan_eks_cluster.name
-  addon_name                  = each.value.addon_name
+  addon_name                  = each.key
   addon_version               = each.value.addon_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  configuration_values        = contains(keys(each.value), "configuration_values") && each.value.configuration_values != null ? jsonencode(each.value.configuration_values) : null
+  configuration_values        = jsonencode(each.value.configuration_values)
 }
 
 # EKS Node Groups IAM Role

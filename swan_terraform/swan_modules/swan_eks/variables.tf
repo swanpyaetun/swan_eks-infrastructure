@@ -11,10 +11,9 @@ variable "swan_private_subnet_ids" {
 }
 
 variable "swan_eks_addons" {
-  type = list(object({
-    addon_name           = string
+  type = map(object({
     addon_version        = string
-    configuration_values = optional(any)
+    configuration_values = optional(map(any), {})
   }))
 }
 

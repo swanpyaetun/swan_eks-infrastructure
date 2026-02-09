@@ -11,9 +11,8 @@ swan_private_subnet_tags = {
 }
 swan_eks_cluster_name    = "swan_production_eks_cluster"
 swan_eks_cluster_version = "1.35"
-swan_eks_addons = [
-  {
-    addon_name    = "vpc-cni"
+swan_eks_addons = {
+  vpc-cni = {
     addon_version = "v1.21.1-eksbuild.3"
     configuration_values = {
       enableNetworkPolicy = "true"
@@ -22,19 +21,16 @@ swan_eks_addons = [
       }
     }
   },
-  {
-    addon_name    = "coredns"
+  coredns = {
     addon_version = "v1.13.2-eksbuild.1"
   },
-  {
-    addon_name    = "kube-proxy"
+  kube-proxy = {
     addon_version = "v1.35.0-eksbuild.2"
   },
-  {
-    addon_name    = "eks-pod-identity-agent"
+  eks-pod-identity-agent = {
     addon_version = "v1.3.10-eksbuild.2"
   }
-]
+}
 swan_eks_node_groups = {
   swan_ondemand_nodegroup = {
     instance_types = ["t3.medium"]
