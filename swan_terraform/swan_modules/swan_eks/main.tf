@@ -41,17 +41,6 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
   ]
 }
 
-# EKS add-ons
-resource "aws_eks_addon" "swan_eks_addons" {
-  for_each                    = var.swan_eks_addons
-  cluster_name                = aws_eks_cluster.swan_eks_cluster.name
-  addon_name                  = each.key
-  addon_version               = each.value.addon_version
-  resolve_conflicts_on_create = "OVERWRITE"
-  resolve_conflicts_on_update = "OVERWRITE"
-  configuration_values        = jsonencode(each.value.configuration_values)
-}
-
 # EKS Node Groups IAM Role
 resource "aws_iam_role" "swan_eks_node_role" {
   name = "${var.swan_eks_cluster_name}-swan_eks_node_role"
