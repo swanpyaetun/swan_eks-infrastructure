@@ -13,7 +13,7 @@ swan_eks_cluster_name    = "swan_production_eks_cluster"
 swan_eks_cluster_version = "1.35"
 swan_eks_addons = [
   {
-    addon_name    = "vpc-cni",
+    addon_name    = "vpc-cni"
     addon_version = "v1.21.1-eksbuild.3"
     configuration_values = {
       enableNetworkPolicy = "true"
