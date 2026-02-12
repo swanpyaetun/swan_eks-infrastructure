@@ -38,6 +38,11 @@ module "swan_argocd" {
   depends_on            = [module.swan_eks]
 }
 
+module "swan_sealed_secrets" {
+  source     = "../../swan_modules/swan_sealed_secrets"
+  depends_on = [module.swan_eks]
+}
+
 module "swan_ecr" {
   source                    = "../../swan_modules/swan_ecr"
   swan_ecr_namespace        = var.swan_ecr_namespace
