@@ -13,7 +13,7 @@ swan_eks_cluster_name    = "swan_production_eks_cluster"
 swan_eks_cluster_version = "1.35"
 swan_eks_node_groups = {
   swan_ondemand_nodegroup = {
-    instance_types = ["t3.medium"]
+    instance_types = ["t3.xlarge"]
     capacity_type  = "ON_DEMAND"
     scaling_config = {
       desired_size = 0
@@ -22,12 +22,12 @@ swan_eks_node_groups = {
     }
   }
   swan_spot_nodegroup = {
-    instance_types = ["t3.medium"]
+    instance_types = ["t3.xlarge"]
     capacity_type  = "SPOT"
     scaling_config = {
-      desired_size = 5
+      desired_size = 2
       min_size     = 0
-      max_size     = 5
+      max_size     = 2
     }
   }
 }
