@@ -2,7 +2,7 @@ resource "helm_release" "swan_argocd_helm_release" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
-  version          = "9.4.0"
+  version          = "9.4.1"
   namespace        = "argocd"
   create_namespace = true
 }
@@ -13,12 +13,12 @@ resource "helm_release" "swan_argocd_image_updater_helm_release" {
 
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argocd-image-updater"
-  version          = "1.0.5"
+  version          = "1.1.0"
   namespace        = "argocd"
   create_namespace = true
 
   values = [
-    templatefile("${path.module}/swan_values/argocd-image-updater-values.yaml.tpl", {
+    templatefile("${path.module}/swan_values/argocd-image-updater.yaml.tpl", {
       swan_aws_region   = var.swan_aws_region
       swan_ecr_registry = var.swan_ecr_registry
     })

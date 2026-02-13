@@ -5,7 +5,7 @@ serviceAccount:
 authScripts:
   enabled: true
   scripts:
-    auth.sh: |
+    auth1.sh: |
       #!/bin/sh
       aws ecr --region ${swan_aws_region} get-authorization-token --output text --query 'authorizationData[].authorizationToken' | base64 -d
 
@@ -16,5 +16,5 @@ config:
     prefix: ${swan_ecr_registry}
     ping: yes
     insecure: no
-    credentials: ext:/scripts/auth.sh
+    credentials: ext:/scripts/auth1.sh
     credsexpire: 10h

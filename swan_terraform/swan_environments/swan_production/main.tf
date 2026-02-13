@@ -42,6 +42,11 @@ module "swan_sealed_secrets" {
   depends_on = [module.swan_eks]
 }
 
+module "swan_metrics_server" {
+  source     = "../../swan_modules/swan_metrics_server"
+  depends_on = [module.swan_eks]
+}
+
 module "swan_ecr" {
   source                    = "../../swan_modules/swan_ecr"
   swan_ecr_namespace        = var.swan_ecr_namespace
