@@ -12,7 +12,6 @@ on:
 env:
   SWAN_AWS_REGION: "ap-southeast-1"
   TF_VAR_swan_ci_role_arn: ${{ secrets.SWAN_CI_ROLE_ARN }}
-  TF_VAR_swan_eks_cluster_admin_user_arn: ${{ secrets.SWAN_EKS_CLUSTER_ADMIN_USER_ARN }}
   TF_VAR_swan_ecr_registry: ${{ secrets.SWAN_ECR_REGISTRY }}
 
 permissions:

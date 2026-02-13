@@ -1,3 +1,19 @@
+# CI Role
+resource "aws_eks_access_entry" "swan_ci_role_access_entry" {
+  cluster_name  = aws_eks_cluster.swan_eks_cluster.name
+  principal_arn = var.swan_ci_role_arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "swan_ci_role_access_policy_association" {
+  cluster_name  = aws_eks_cluster.swan_eks_cluster.name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = var.swan_ci_role_arn
+  access_scope {
+    type = "cluster"
+  }
+}
+
 # EKS Cluster Admin IAM Role
 data "aws_caller_identity" "current" {}
 
