@@ -20,7 +20,6 @@ module "swan_eks" {
   swan_kube_proxy_eks_addon_version             = var.swan_kube_proxy_eks_addon_version
   swan_eks_pod_identity_agent_eks_addon_version = var.swan_eks_pod_identity_agent_eks_addon_version
   swan_ci_role_arn                              = var.swan_ci_role_arn
-  swan_eks_cluster_admin_user_arn               = var.swan_eks_cluster_admin_user_arn
 }
 
 module "swan_aws_load_balancer_controller" {
