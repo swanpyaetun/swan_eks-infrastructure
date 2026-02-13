@@ -25,9 +25,9 @@ swan_eks_node_groups = {
     instance_types = ["t3.medium"]
     capacity_type  = "SPOT"
     scaling_config = {
-      desired_size = 4
+      desired_size = 5
       min_size     = 0
-      max_size     = 4
+      max_size     = 5
     }
   }
 }
