@@ -1,32 +1,3 @@
-resource "helm_release" "swan_argocd_helm_release" {
-  name             = "argocd"
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  version          = "9.4.1"
-  namespace        = "argocd"
-  create_namespace = true
-}
-
-# Argo CD Image Updater
-resource "helm_release" "swan_argocd_image_updater_helm_release" {
-  name = "argocd-image-updater"
-
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argocd-image-updater"
-  version          = "1.1.0"
-  namespace        = "argocd"
-  create_namespace = true
-
-  values = [
-    templatefile("${path.module}/swan_values/argocd-image-updater.yaml.tpl", {
-      swan_aws_region   = var.swan_aws_region
-      swan_ecr_registry = var.swan_ecr_registry
-    })
-  ]
-
-  depends_on = [helm_release.swan_argocd_helm_release]
-}
-
 resource "aws_iam_role" "swan_argocd_image_updater_role" {
   name = "${var.swan_eks_cluster_name}-swan_argocd_image_updater_role"
   assume_role_policy = jsonencode({

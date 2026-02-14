@@ -22,29 +22,13 @@ module "swan_eks" {
   swan_ci_role_arn                              = var.swan_ci_role_arn
 }
 
-module "swan_aws_load_balancer_controller" {
-  source                = "../../swan_modules/swan_aws_load_balancer_controller"
-  swan_eks_cluster_name = var.swan_eks_cluster_name
-  swan_vpc_id           = module.swan_vpc.swan_vpc_id
-  depends_on            = [module.swan_eks]
-}
-
-module "swan_argocd" {
-  source                = "../../swan_modules/swan_argocd"
+module "swan_eks_self_managed_addons" {
+  source = "../../swan_modules/swan_eks_self_managed_addons"
   swan_aws_region       = var.swan_aws_region
   swan_ecr_registry     = var.swan_ecr_registry
   swan_eks_cluster_name = var.swan_eks_cluster_name
+  swan_vpc_id           = module.swan_vpc.swan_vpc_id
   depends_on            = [module.swan_eks]
-}
-
-module "swan_sealed_secrets" {
-  source     = "../../swan_modules/swan_sealed_secrets"
-  depends_on = [module.swan_eks]
-}
-
-module "swan_metrics_server" {
-  source     = "../../swan_modules/swan_metrics_server"
-  depends_on = [module.swan_eks]
 }
 
 module "swan_ecr" {

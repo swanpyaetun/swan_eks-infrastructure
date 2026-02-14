@@ -2,6 +2,7 @@ variable "swan_aws_region" {
   type = string
 }
 
+# swan_vpc
 variable "swan_vpc_cidr_block" {
   type = string
 }
@@ -28,6 +29,7 @@ variable "swan_private_subnet_tags" {
   default = {}
 }
 
+# swan_eks
 variable "swan_eks_cluster_name" {
   type = string
 }
@@ -69,11 +71,13 @@ variable "swan_ci_role_arn" {
   sensitive = true
 }
 
+# swan_eks_self_managed_addons
 variable "swan_ecr_registry" {
   type      = string
   sensitive = true
 }
 
+# swan_ecr
 variable "swan_ecr_namespace" {
   type = string
 }
