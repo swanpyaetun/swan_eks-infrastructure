@@ -26,9 +26,9 @@ resource "aws_iam_role_policy_attachment" "swan_aws_load_balancer_controller_rol
 }
 
 resource "aws_eks_pod_identity_association" "swan_aws_load_balancer_controller_pod_identity_association" {
-  cluster_name    = var.swan_eks_cluster_name
+  cluster_name    = aws_eks_cluster.swan_eks_cluster.name
   namespace       = "kube-system"
   service_account = "aws-load-balancer-controller"
   role_arn        = aws_iam_role.swan_aws_load_balancer_controller_role.arn
-  depends_on      = [aws_eks_cluster.swan_eks_cluster]
+  depends_on      = [aws_eks_addon.swan_eks_pod_identity_agent_eks_addon]
 }

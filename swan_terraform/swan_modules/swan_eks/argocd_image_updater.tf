@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "swan_argocd_image_updater_role_policy
 }
 
 resource "aws_eks_pod_identity_association" "swan_argocd_image_updater_pod_identity_association" {
-  cluster_name    = var.swan_eks_cluster_name
+  cluster_name    = aws_eks_cluster.swan_eks_cluster.name
   namespace       = "argocd"
   service_account = "argocd-image-updater"
   role_arn        = aws_iam_role.swan_argocd_image_updater_role.arn
