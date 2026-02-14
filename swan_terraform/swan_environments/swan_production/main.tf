@@ -23,7 +23,7 @@ module "swan_eks" {
 }
 
 module "swan_eks_self_managed_addons" {
-  source = "../../swan_modules/swan_eks_self_managed_addons"
+  source                = "../../swan_modules/swan_eks_self_managed_addons"
   swan_aws_region       = var.swan_aws_region
   swan_ecr_registry     = var.swan_ecr_registry
   swan_eks_cluster_name = var.swan_eks_cluster_name

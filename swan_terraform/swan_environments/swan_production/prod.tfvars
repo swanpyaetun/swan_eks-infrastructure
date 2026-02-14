@@ -1,4 +1,4 @@
-swan_aws_region                = "ap-southeast-1"
+swan_aws_region = "ap-southeast-1"
 
 # swan_vpc
 swan_vpc_cidr_block            = "10.0.0.0/16"
@@ -41,7 +41,7 @@ swan_kube_proxy_eks_addon_version             = "v1.35.0-eksbuild.2"
 swan_eks_pod_identity_agent_eks_addon_version = "v1.3.10-eksbuild.2"
 
 # swan_ecr
-swan_ecr_namespace                            = "swan_polyglot-microservices-application"
+swan_ecr_namespace = "swan_polyglot-microservices-application"
 swan_ecr_repository_names = [
   "accounting",
   "ad",
