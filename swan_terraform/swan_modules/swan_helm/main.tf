@@ -25,7 +25,7 @@ resource "helm_release" "swan_argocd_image_updater_helm_release" {
 
   values = [
     templatefile("${path.module}/swan_values/argocd-image-updater.yaml.tpl", {
-      swan_aws_region     = data.aws_region.current.name
+      swan_aws_region     = data.aws_region.current.id
       swan_aws_account_id = data.aws_caller_identity.current.account_id
     })
   ]

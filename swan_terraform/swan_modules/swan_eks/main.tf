@@ -37,7 +37,7 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.swan_eks_cluster_role_policy_attachment
+    aws_iam_role_policy_attachment.swan_eks_cluster_iam_role_policy_attachment
   ]
 }
 
@@ -85,6 +85,6 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.swan_eks_nodes_role_policy_attachment
+    aws_iam_role_policy_attachment.swan_eks_nodes_iam_role_policy_attachment
   ]
 }
