@@ -2,8 +2,8 @@
 config:
   registries:
   - name: ECR
-    api_url: https://${swan_aws_account_id}.dkr.ecr.${swan_aws_account_id}.amazonaws.com
-    prefix: ${swan_aws_account_id}.dkr.ecr.${swan_aws_account_id}.amazonaws.com
+    api_url: https://${swan_aws_account_id}.dkr.ecr.${swan_aws_region}.amazonaws.com
+    prefix: ${swan_aws_account_id}.dkr.ecr.${swan_aws_region}.amazonaws.com
     ping: yes
     insecure: no
     credentials: ext:/scripts/auth1.sh
