@@ -1,4 +1,4 @@
-resource "aws_iam_role" "swan_aws_load_balancer_controller_iam_role" {
+resource "aws_iam_role" "swan_aws_lb_controller_iam_role" {
   name = "${var.swan_eks_cluster_name}-swan_aws_lb_controller_iam_role"
 
   assume_role_policy = jsonencode({
@@ -16,21 +16,21 @@ resource "aws_iam_role" "swan_aws_load_balancer_controller_iam_role" {
   })
 }
 
-resource "aws_iam_role_policy" "swan_aws_load_balancer_controller_iam_role_policy" {
-  name   = "${var.swan_eks_cluster_name}-swan_aws_load_balancer_controller_iam_role_policy"
-  role   = aws_iam_role.swan_aws_load_balancer_controller_iam_role.name
-  policy = data.aws_iam_policy_document.swan_aws_load_balancer_controller_iam_policy_document.json
+resource "aws_iam_role_policy" "swan_aws_lb_controller_iam_role_policy" {
+  name   = "${var.swan_eks_cluster_name}-swan_aws_lb_controller_iam_role_policy"
+  role   = aws_iam_role.swan_aws_lb_controller_iam_role.name
+  policy = data.aws_iam_policy_document.swan_aws_lb_controller_iam_policy_document.json
 }
 
-resource "aws_eks_pod_identity_association" "swan_aws_load_balancer_controller_pod_identity_association" {
-  role_arn        = aws_iam_role.swan_aws_load_balancer_controller_iam_role.arn
+resource "aws_eks_pod_identity_association" "swan_aws_lb_controller_pod_identity_association" {
+  role_arn        = aws_iam_role.swan_aws_lb_controller_iam_role.arn
   cluster_name    = aws_eks_cluster.swan_eks_cluster.name
   namespace       = "kube-system"
   service_account = "aws-load-balancer-controller"
   depends_on      = [aws_eks_addon.swan_eks_pod_identity_agent_eks_addon]
 }
 
-data "aws_iam_policy_document" "swan_aws_load_balancer_controller_iam_policy_document" {
+data "aws_iam_policy_document" "swan_aws_lb_controller_iam_policy_document" {
   statement {
     effect = "Allow"
 
