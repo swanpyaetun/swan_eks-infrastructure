@@ -27,7 +27,7 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
 
   vpc_config {
     subnet_ids              = var.swan_private_subnet_ids
-    endpoint_public_access  = false
+    endpoint_public_access  = true
     endpoint_private_access = true
   }
 
