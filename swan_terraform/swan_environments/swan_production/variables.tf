@@ -66,13 +66,7 @@ variable "swan_eks_pod_identity_agent_eks_addon_version" {
   type = string
 }
 
-variable "swan_ci_role_arn" {
-  type      = string
-  sensitive = true
-}
-
-# swan_eks_self_managed_addons
-variable "swan_ecr_registry" {
+variable "swan_ci_iam_role_arn" {
   type      = string
   sensitive = true
 }

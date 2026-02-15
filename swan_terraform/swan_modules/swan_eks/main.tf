@@ -1,6 +1,6 @@
 # EKS Cluster IAM Role
-resource "aws_iam_role" "swan_eks_cluster_role" {
-  name = "${var.swan_eks_cluster_name}-swan_eks_cluster_role"
+resource "aws_iam_role" "swan_eks_cluster_iam_role" {
+  name = "${var.swan_eks_cluster_name}-swan_eks_cluster_iam_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -14,21 +14,21 @@ resource "aws_iam_role" "swan_eks_cluster_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "swan_eks_cluster_role_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "swan_eks_cluster_iam_role_policy_attachment" {
+  role       = aws_iam_role.swan_eks_cluster_iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.swan_eks_cluster_role.name
 }
 
 # EKS Cluster
 resource "aws_eks_cluster" "swan_eks_cluster" {
   name     = var.swan_eks_cluster_name
-  role_arn = aws_iam_role.swan_eks_cluster_role.arn
+  role_arn = aws_iam_role.swan_eks_cluster_iam_role.arn
   version  = var.swan_eks_cluster_version
 
   vpc_config {
     subnet_ids              = var.swan_private_subnet_ids
-    endpoint_public_access  = true
-    endpoint_private_access = false
+    endpoint_public_access  = false
+    endpoint_private_access = true
   }
 
   access_config {
@@ -41,9 +41,9 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
   ]
 }
 
-# EKS Node Groups IAM Role
-resource "aws_iam_role" "swan_eks_node_role" {
-  name = "${var.swan_eks_cluster_name}-swan_eks_node_role"
+# EKS Nodes IAM Role
+resource "aws_iam_role" "swan_eks_nodes_iam_role" {
+  name = "${var.swan_eks_cluster_name}-swan_eks_nodes_iam_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -57,15 +57,15 @@ resource "aws_iam_role" "swan_eks_node_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "swan_eks_node_role_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "swan_eks_nodes_iam_role_policy_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ])
 
+  role       = aws_iam_role.swan_eks_nodes_iam_role.name
   policy_arn = each.value
-  role       = aws_iam_role.swan_eks_node_role.name
 }
 
 # EKS Node Groups
@@ -73,7 +73,7 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
   for_each        = var.swan_eks_node_groups
   cluster_name    = aws_eks_cluster.swan_eks_cluster.name
   node_group_name = each.key
-  node_role_arn   = aws_iam_role.swan_eks_node_role.arn
+  node_role_arn   = aws_iam_role.swan_eks_nodes_iam_role.arn
   subnet_ids      = var.swan_private_subnet_ids
   instance_types  = each.value.instance_types
   capacity_type   = each.value.capacity_type
@@ -85,6 +85,6 @@ resource "aws_eks_node_group" "swan_eks_node_groups" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.swan_eks_node_role_policy_attachment
+    aws_iam_role_policy_attachment.swan_eks_nodes_role_policy_attachment
   ]
 }

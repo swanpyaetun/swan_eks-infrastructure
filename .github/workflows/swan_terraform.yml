@@ -11,8 +11,7 @@ on:
 
 env:
   SWAN_AWS_REGION: "ap-southeast-1"
-  TF_VAR_swan_ci_role_arn: ${{ secrets.SWAN_CI_ROLE_ARN }}
-  TF_VAR_swan_ecr_registry: ${{ secrets.SWAN_ECR_REGISTRY }}
+  TF_VAR_swan_ci_iam_role_arn: ${{ secrets.SWAN_CI_IAM_ROLE_ARN }}
 
 permissions:
   id-token: write # id-token write permission is needed to use OIDC
@@ -34,7 +33,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          role-to-assume: ${{ secrets.SWAN_CI_ROLE_ARN }}
+          role-to-assume: ${{ secrets.SWAN_CI_IAM_ROLE_ARN }}
           aws-region: ${{ env.SWAN_AWS_REGION }}
 
       - name: Terraform Init
@@ -74,7 +73,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          role-to-assume: ${{ secrets.SWAN_CI_ROLE_ARN }}
+          role-to-assume: ${{ secrets.SWAN_CI_IAM_ROLE_ARN }}
           aws-region: ${{ env.SWAN_AWS_REGION }}
 
       - name: Terraform Init

@@ -1,10 +1,9 @@
 resource "helm_release" "swan_sealed_secrets_helm_release" {
-  name             = "sealed-secrets"
-  repository       = "https://bitnami-labs.github.io/sealed-secrets/"
-  chart            = "sealed-secrets"
-  version          = "2.18.1"
-  namespace        = "kube-system"
-  create_namespace = true
+  name       = "sealed-secrets"
+  repository = "https://bitnami-labs.github.io/sealed-secrets/"
+  chart      = "sealed-secrets"
+  version    = "2.18.1"
+  namespace  = "kube-system"
 }
 
 resource "helm_release" "swan_argocd_helm_release" {
@@ -19,16 +18,15 @@ resource "helm_release" "swan_argocd_helm_release" {
 resource "helm_release" "swan_argocd_image_updater_helm_release" {
   name = "argocd-image-updater"
 
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argocd-image-updater"
-  version          = "1.1.0"
-  namespace        = "argocd"
-  create_namespace = true
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-image-updater"
+  version    = "1.1.0"
+  namespace  = "argocd"
 
   values = [
     templatefile("${path.module}/swan_values/argocd-image-updater.yaml.tpl", {
-      swan_aws_region   = var.swan_aws_region
-      swan_ecr_registry = var.swan_ecr_registry
+      swan_aws_region     = data.aws_region.current.name
+      swan_aws_account_id = data.aws_caller_identity.current.account_id
     })
   ]
 
@@ -42,17 +40,11 @@ resource "helm_release" "swan_aws_load_balancer_controller_helm_release" {
   version    = "3.0.0"
   namespace  = "kube-system"
 
-  set = [
-    {
-      name  = "clusterName"
-      value = var.swan_eks_cluster_name
-      }, {
-      name  = "serviceAccount.name"
-      value = "aws-load-balancer-controller"
-      }, {
-      name  = "vpcId"
-      value = var.swan_vpc_id
-  }]
+  values = [
+    templatefile("${path.module}/swan_values/aws-load-balancer-controller.yaml.tpl", {
+      swan_eks_cluster_name = var.swan_eks_cluster_name
+    })
+  ]
 }
 
 resource "helm_release" "swan_metrics_server_helm_release" {

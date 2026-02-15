@@ -19,15 +19,12 @@ module "swan_eks" {
   swan_coredns_eks_addon_version                = var.swan_coredns_eks_addon_version
   swan_kube_proxy_eks_addon_version             = var.swan_kube_proxy_eks_addon_version
   swan_eks_pod_identity_agent_eks_addon_version = var.swan_eks_pod_identity_agent_eks_addon_version
-  swan_ci_role_arn                              = var.swan_ci_role_arn
+  swan_ci_iam_role_arn                          = var.swan_ci_iam_role_arn
 }
 
-module "swan_eks_self_managed_addons" {
-  source                = "../../swan_modules/swan_eks_self_managed_addons"
-  swan_aws_region       = var.swan_aws_region
-  swan_ecr_registry     = var.swan_ecr_registry
+module "swan_helm" {
+  source                = "../../swan_modules/swan_helm"
   swan_eks_cluster_name = var.swan_eks_cluster_name
-  swan_vpc_id           = module.swan_vpc.swan_vpc_id
   depends_on            = [module.swan_eks]
 }
 

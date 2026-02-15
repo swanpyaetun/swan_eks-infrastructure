@@ -10,6 +10,8 @@ swan_public_subnet_tags = {
 swan_private_subnet_cidr_blocks = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
 swan_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = "1"
+  # for Karpenter auto-discovery
+  "karpenter.sh/discovery" = "swan_production_eks_cluster"
 }
 
 # swan_eks
