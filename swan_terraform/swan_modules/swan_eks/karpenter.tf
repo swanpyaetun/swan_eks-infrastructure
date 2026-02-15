@@ -490,7 +490,7 @@ locals {
 
 resource "aws_cloudwatch_event_rule" "swan_eventbridge_rules" {
   for_each      = local.swan_events
-  name          = "${var.swan_eks_cluster_name}-${each.value.name}"
+  name          = each.value.name
   description   = each.value.description
   event_pattern = jsonencode(each.value.event_pattern)
 }
