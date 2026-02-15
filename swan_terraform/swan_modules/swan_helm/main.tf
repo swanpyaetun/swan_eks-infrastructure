@@ -43,6 +43,7 @@ resource "helm_release" "swan_aws_load_balancer_controller_helm_release" {
   values = [
     templatefile("${path.module}/swan_values/aws-load-balancer-controller.yaml.tpl", {
       swan_eks_cluster_name = var.swan_eks_cluster_name
+      swan_vpc_id           = var.swan_vpc_id
     })
   ]
 }
