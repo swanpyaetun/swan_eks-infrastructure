@@ -1,5 +1,5 @@
 resource "aws_iam_role" "swan_aws_load_balancer_controller_iam_role" {
-  name = "${var.swan_eks_cluster_name}-swan_aws_load_balancer_controller_iam_role"
+  name = "${var.swan_eks_cluster_name}-swan_aws_lb_controller_iam_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
