@@ -15,6 +15,10 @@ resource "helm_release" "swan_argocd_helm_release" {
   create_namespace = true
 }
 
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
 resource "helm_release" "swan_argocd_image_updater_helm_release" {
   name = "argocd-image-updater"
 

@@ -1,7 +1,3 @@
-variable "swan_aws_region" {
-  type = string
-}
-
 # swan_vpc
 variable "swan_vpc_cidr_block" {
   type = string

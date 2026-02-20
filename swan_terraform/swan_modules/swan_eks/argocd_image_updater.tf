@@ -1,3 +1,4 @@
+# Argo CD Image Updater IAM Role
 resource "aws_iam_role" "swan_argocd_image_updater_iam_role" {
   name = "${var.swan_eks_cluster_name}-swan_argocd_image_updater_iam_role"
 
