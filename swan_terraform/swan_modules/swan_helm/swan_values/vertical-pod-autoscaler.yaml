@@ -1,4 +1,0 @@
----
-admissionController:
-  extraArgs:
-    - --leader-elect=true

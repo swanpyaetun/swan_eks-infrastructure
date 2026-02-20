@@ -59,17 +59,3 @@ resource "helm_release" "swan_metrics_server_helm_release" {
   version    = "3.13.0"
   namespace  = "kube-system"
 }
-
-resource "helm_release" "swan_vertical_pod_autoscaler_helm_release" {
-  name       = "vertical-pod-autoscaler"
-  repository = "https://kubernetes.github.io/autoscaler"
-  chart      = "vertical-pod-autoscaler"
-  version    = "0.8.0"
-  namespace  = "kube-system"
-
-  values = [
-    file("${path.module}/swan_values/vertical-pod-autoscaler.yaml")
-  ]
-
-  depends_on = [helm_release.swan_aws_load_balancer_controller_helm_release]
-}
