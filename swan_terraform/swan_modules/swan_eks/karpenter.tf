@@ -293,7 +293,7 @@ data "aws_iam_policy_document" "swan_karpenter_iam_policy_document" {
     sid       = "AllowPassingInstanceRole"
     effect    = "Allow"
     actions   = ["iam:PassRole"]
-    resources = [aws_iam_role.swan_eks_nodes_iam_role.arn]
+    resources = [aws_iam_role.swan_eks_node_iam_role.arn]
 
     condition {
       test     = "StringEquals"

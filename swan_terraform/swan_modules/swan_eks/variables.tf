@@ -10,16 +10,20 @@ variable "swan_private_subnet_ids" {
   type = list(string)
 }
 
-variable "swan_eks_node_groups" {
-  type = map(object({
-    instance_types = list(string)
-    capacity_type  = string
-    scaling_config = object({
-      desired_size = number
-      min_size     = number
-      max_size     = number
-    })
-  }))
+variable "swan_system_eks_node_group_instance_types" {
+  type = list(string)
+}
+
+variable "swan_system_eks_node_group_desired_size" {
+  type = string
+}
+
+variable "swan_system_eks_node_group_min_size" {
+  type = string
+}
+
+variable "swan_system_eks_node_group_max_size" {
+  type = string
 }
 
 variable "swan_vpc_cni_eks_addon_version" {

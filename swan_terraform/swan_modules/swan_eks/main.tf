@@ -41,9 +41,9 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
   ]
 }
 
-# EKS Nodes IAM Role
-resource "aws_iam_role" "swan_eks_nodes_iam_role" {
-  name = "${var.swan_eks_cluster_name}-swan_eks_nodes_iam_role"
+# EKS Node IAM Role
+resource "aws_iam_role" "swan_eks_node_iam_role" {
+  name = "${var.swan_eks_cluster_name}-swan_eks_node_iam_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -57,34 +57,47 @@ resource "aws_iam_role" "swan_eks_nodes_iam_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "swan_eks_nodes_iam_role_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "swan_eks_node_iam_role_policy_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ])
 
-  role       = aws_iam_role.swan_eks_nodes_iam_role.name
+  role       = aws_iam_role.swan_eks_node_iam_role.name
   policy_arn = each.value
 }
 
-# EKS Node Groups
-resource "aws_eks_node_group" "swan_eks_node_groups" {
-  for_each        = var.swan_eks_node_groups
+# System EKS Node Group
+resource "aws_eks_node_group" "swan_system_eks_node_group" {
   cluster_name    = aws_eks_cluster.swan_eks_cluster.name
-  node_group_name = each.key
-  node_role_arn   = aws_iam_role.swan_eks_nodes_iam_role.arn
+  node_group_name = "${var.swan_eks_cluster_name}-swan_system_eks_node_group"
+  node_role_arn   = aws_iam_role.swan_eks_node_iam_role.arn
   subnet_ids      = var.swan_private_subnet_ids
-  instance_types  = each.value.instance_types
-  capacity_type   = each.value.capacity_type
+  capacity_type   = "ON_DEMAND"
+  instance_types  = var.swan_system_eks_node_group_instance_types
 
   scaling_config {
-    desired_size = each.value.scaling_config.desired_size
-    min_size     = each.value.scaling_config.min_size
-    max_size     = each.value.scaling_config.max_size
+    desired_size = var.swan_system_eks_node_group_desired_size
+    min_size     = var.swan_system_eks_node_group_min_size
+    max_size     = var.swan_system_eks_node_group_max_size
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  labels = {
+    system = "true"
+  }
+
+  taint {
+    key    = "system"
+    value  = "true"
+    effect = "NO_SCHEDULE"
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.swan_eks_nodes_iam_role_policy_attachment
+    aws_iam_role_policy_attachment.swan_eks_node_iam_role_policy_attachment
   ]
 }

@@ -18,3 +18,12 @@ authScripts:
 
 serviceAccount:
   name: argocd-image-updater
+
+nodeSelector:
+  system: "true"
+
+tolerations:
+- key: "system"
+  operator: "Equal"
+  value: "true"
+  effect: "NoSchedule"

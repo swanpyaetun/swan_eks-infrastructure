@@ -14,7 +14,10 @@ module "swan_eks" {
   swan_eks_cluster_name                         = var.swan_eks_cluster_name
   swan_eks_cluster_version                      = var.swan_eks_cluster_version
   swan_private_subnet_ids                       = module.swan_vpc.swan_private_subnet_ids
-  swan_eks_node_groups                          = var.swan_eks_node_groups
+  swan_system_eks_node_group_instance_types     = var.swan_system_eks_node_group_instance_types
+  swan_system_eks_node_group_desired_size       = var.swan_system_eks_node_group_desired_size
+  swan_system_eks_node_group_min_size           = var.swan_system_eks_node_group_min_size
+  swan_system_eks_node_group_max_size           = var.swan_system_eks_node_group_max_size
   swan_vpc_cni_eks_addon_version                = var.swan_vpc_cni_eks_addon_version
   swan_coredns_eks_addon_version                = var.swan_coredns_eks_addon_version
   swan_kube_proxy_eks_addon_version             = var.swan_kube_proxy_eks_addon_version

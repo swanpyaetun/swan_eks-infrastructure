@@ -4,6 +4,7 @@ resource "helm_release" "swan_sealed_secrets_helm_release" {
   chart      = "sealed-secrets"
   version    = "2.18.1"
   namespace  = "kube-system"
+  values     = [file("${path.module}/swan_helm_values/sealed-secrets.yaml")]
 }
 
 resource "helm_release" "swan_argocd_helm_release" {
@@ -13,6 +14,7 @@ resource "helm_release" "swan_argocd_helm_release" {
   version          = "9.4.1"
   namespace        = "argocd"
   create_namespace = true
+  values           = [file("${path.module}/swan_helm_values/argocd.yaml")]
 }
 
 data "aws_caller_identity" "current" {}
@@ -58,6 +60,7 @@ resource "helm_release" "swan_metrics_server_helm_release" {
   chart      = "metrics-server"
   version    = "3.13.0"
   namespace  = "kube-system"
+  values     = [file("${path.module}/swan_helm_values/metrics-server.yaml")]
 }
 
 data "aws_ecrpublic_authorization_token" "token" {
