@@ -59,3 +59,25 @@ resource "helm_release" "swan_metrics_server_helm_release" {
   version    = "3.13.0"
   namespace  = "kube-system"
 }
+
+data "aws_ecrpublic_authorization_token" "token" {
+  region = "us-east-1"
+}
+
+resource "helm_release" "swan_karpenter_helm_release" {
+  name                = "karpenter"
+  repository          = "oci://public.ecr.aws/karpenter"
+  repository_username = data.aws_ecrpublic_authorization_token.token.user_name
+  repository_password = data.aws_ecrpublic_authorization_token.token.password
+  chart               = "karpenter"
+  version             = "1.9.0"
+  namespace           = "kube-system"
+
+  values = [
+    templatefile("${path.module}/swan_values/karpenter.yaml.tpl", {
+      swan_eks_cluster_name                      = var.swan_eks_cluster_name
+      swan_eks_cluster_endpoint                  = var.swan_eks_cluster_endpoint
+      swan_karpenter_interruption_sqs_queue_name = var.swan_karpenter_interruption_sqs_queue_name
+    })
+  ]
+}

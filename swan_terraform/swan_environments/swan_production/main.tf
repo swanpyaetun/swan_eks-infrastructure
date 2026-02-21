@@ -23,10 +23,12 @@ module "swan_eks" {
 }
 
 module "swan_helm" {
-  source                = "../../swan_modules/swan_helm"
-  swan_eks_cluster_name = var.swan_eks_cluster_name
-  swan_vpc_id           = module.swan_vpc.swan_vpc_id
-  depends_on            = [module.swan_eks]
+  source                                     = "../../swan_modules/swan_helm"
+  swan_vpc_id                                = module.swan_vpc.swan_vpc_id
+  swan_eks_cluster_name                      = var.swan_eks_cluster_name
+  swan_eks_cluster_endpoint                  = module.swan_eks.swan_eks_cluster_endpoint
+  swan_karpenter_interruption_sqs_queue_name = module.swan_eks.swan_karpenter_interruption_sqs_queue_name
+  depends_on                                 = [module.swan_eks]
 }
 
 module "swan_ecr" {
