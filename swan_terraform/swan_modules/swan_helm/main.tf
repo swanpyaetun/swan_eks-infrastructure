@@ -28,7 +28,7 @@ resource "helm_release" "swan_argocd_image_updater_helm_release" {
   namespace  = "argocd"
 
   values = [
-    templatefile("${path.module}/swan_values/argocd-image-updater.yaml.tpl", {
+    templatefile("${path.module}/swan_helm_values/argocd-image-updater.yaml.tpl", {
       swan_aws_region     = data.aws_region.current.id
       swan_aws_account_id = data.aws_caller_identity.current.account_id
     })
@@ -45,7 +45,7 @@ resource "helm_release" "swan_aws_load_balancer_controller_helm_release" {
   namespace  = "kube-system"
 
   values = [
-    templatefile("${path.module}/swan_values/aws-load-balancer-controller.yaml.tpl", {
+    templatefile("${path.module}/swan_helm_values/aws-load-balancer-controller.yaml.tpl", {
       swan_eks_cluster_name = var.swan_eks_cluster_name
       swan_vpc_id           = var.swan_vpc_id
     })
@@ -74,7 +74,7 @@ resource "helm_release" "swan_karpenter_helm_release" {
   namespace           = "kube-system"
 
   values = [
-    templatefile("${path.module}/swan_values/karpenter.yaml.tpl", {
+    templatefile("${path.module}/swan_helm_values/karpenter.yaml.tpl", {
       swan_eks_cluster_name                      = var.swan_eks_cluster_name
       swan_eks_cluster_endpoint                  = var.swan_eks_cluster_endpoint
       swan_karpenter_interruption_sqs_queue_name = var.swan_karpenter_interruption_sqs_queue_name
