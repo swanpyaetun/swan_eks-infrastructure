@@ -110,389 +110,51 @@ resource "aws_iam_role" "swan_karpenter_iam_role" {
   })
 }
 
-data "aws_iam_policy_document" "swan_karpenter_iam_policy_document" {
-
-  # ==========================================================
-  # 1. EC2 NODE LIFECYCLE
-  # ==========================================================
-
-  statement {
-    sid     = "AllowScopedEC2InstanceAccessActions"
-    effect  = "Allow"
-    actions = ["ec2:RunInstances", "ec2:CreateFleet"]
-
-    resources = [
-      "arn:aws:ec2:${data.aws_region.current.id}::image/*",
-      "arn:aws:ec2:${data.aws_region.current.id}::snapshot/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:security-group/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:subnet/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:capacity-reservation/*"
-    ]
-  }
-
-  statement {
-    sid     = "AllowScopedEC2LaunchTemplateAccessActions"
-    effect  = "Allow"
-    actions = ["ec2:RunInstances", "ec2:CreateFleet"]
-
-    resources = [
-      "arn:aws:ec2:${data.aws_region.current.id}:*:launch-template/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/karpenter.sh/nodepool"
-      values   = ["*"]
-    }
-  }
-
-  statement {
-    sid     = "AllowScopedEC2InstanceActionsWithTags"
-    effect  = "Allow"
-    actions = ["ec2:RunInstances", "ec2:CreateFleet", "ec2:CreateLaunchTemplate"]
-
-    resources = [
-      "arn:aws:ec2:${data.aws_region.current.id}:*:fleet/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:instance/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:volume/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:network-interface/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:launch-template/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:spot-instances-request/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/eks:eks-cluster-name"
-      values   = [var.swan_eks_cluster_name]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:RequestTag/karpenter.sh/nodepool"
-      values   = ["*"]
-    }
-  }
-
-  statement {
-    sid     = "AllowScopedResourceCreationTagging"
-    effect  = "Allow"
-    actions = ["ec2:CreateTags"]
-
-    resources = [
-      "arn:aws:ec2:${data.aws_region.current.id}:*:fleet/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:instance/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:volume/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:network-interface/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:launch-template/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:spot-instances-request/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/eks:eks-cluster-name"
-      values   = [var.swan_eks_cluster_name]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "ec2:CreateAction"
-      values   = ["RunInstances", "CreateFleet", "CreateLaunchTemplate"]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:RequestTag/karpenter.sh/nodepool"
-      values   = ["*"]
-    }
-  }
-
-  statement {
-    sid     = "AllowScopedResourceTagging"
-    effect  = "Allow"
-    actions = ["ec2:CreateTags"]
-
-    resources = [
-      "arn:aws:ec2:${data.aws_region.current.id}:*:instance/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/karpenter.sh/nodepool"
-      values   = ["*"]
-    }
-
-    condition {
-      test     = "StringEqualsIfExists"
-      variable = "aws:RequestTag/eks:eks-cluster-name"
-      values   = [var.swan_eks_cluster_name]
-    }
-
-    condition {
-      test     = "ForAllValues:StringEquals"
-      variable = "aws:TagKeys"
-      values = [
-        "eks:eks-cluster-name",
-        "karpenter.sh/nodeclaim",
-        "Name"
-      ]
-    }
-  }
-
-  statement {
-    sid     = "AllowScopedDeletion"
-    effect  = "Allow"
-    actions = ["ec2:TerminateInstances", "ec2:DeleteLaunchTemplate"]
-
-    resources = [
-      "arn:aws:ec2:${data.aws_region.current.id}:*:instance/*",
-      "arn:aws:ec2:${data.aws_region.current.id}:*:launch-template/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/karpenter.sh/nodepool"
-      values   = ["*"]
-    }
-  }
-
-  # ==========================================================
-  # 2. IAM INTEGRATION
-  # ==========================================================
-
-  statement {
-    sid       = "AllowPassingInstanceRole"
-    effect    = "Allow"
-    actions   = ["iam:PassRole"]
-    resources = [aws_iam_role.swan_eks_node_iam_role.arn]
-
-    condition {
-      test     = "StringEquals"
-      variable = "iam:PassedToService"
-      values   = ["ec2.amazonaws.com", "ec2.amazonaws.com.cn"]
-    }
-  }
-
-  statement {
-    sid     = "AllowScopedInstanceProfileCreationActions"
-    effect  = "Allow"
-    actions = ["iam:CreateInstanceProfile"]
-
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/eks:eks-cluster-name"
-      values   = [var.swan_eks_cluster_name]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/topology.kubernetes.io/region"
-      values   = [data.aws_region.current.id]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:RequestTag/karpenter.k8s.aws/ec2nodeclass"
-      values   = ["*"]
-    }
-  }
-
-  statement {
-    sid     = "AllowScopedInstanceProfileTagActions"
-    effect  = "Allow"
-    actions = ["iam:TagInstanceProfile"]
-
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/topology.kubernetes.io/region"
-      values   = [data.aws_region.current.id]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/karpenter.k8s.aws/ec2nodeclass"
-      values   = ["*"]
-    }
-  }
-
-  statement {
-    sid    = "AllowScopedInstanceProfileActions"
-    effect = "Allow"
-    actions = [
-      "iam:AddRoleToInstanceProfile",
-      "iam:RemoveRoleFromInstanceProfile",
-      "iam:DeleteInstanceProfile"
-    ]
-
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/kubernetes.io/cluster/${var.swan_eks_cluster_name}"
-      values   = ["owned"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/topology.kubernetes.io/region"
-      values   = [data.aws_region.current.id]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/karpenter.k8s.aws/ec2nodeclass"
-      values   = ["*"]
-    }
-  }
-
-  # ==========================================================
-  # 3. EKS CLUSTER DISCOVERY
-  # ==========================================================
-
-  statement {
-    sid     = "AllowAPIServerEndpointDiscovery"
-    effect  = "Allow"
-    actions = ["eks:DescribeCluster"]
-
-    resources = [
-      "arn:aws:eks:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:cluster/${var.swan_eks_cluster_name}"
-    ]
-  }
-
-  # ==========================================================
-  # 4. SQS INTERRUPTION HANDLING
-  # ==========================================================
-
-  statement {
-    sid    = "AllowInterruptionQueueActions"
-    effect = "Allow"
-    actions = [
-      "sqs:DeleteMessage",
-      "sqs:GetQueueUrl",
-      "sqs:ReceiveMessage"
-    ]
-
-    resources = [aws_sqs_queue.swan_karpenter_interruption_sqs_queue.arn]
-  }
-
-  # ==========================================================
-  # 5. RESOURCE DISCOVERY
-  # ==========================================================
-
-  statement {
-    sid    = "AllowRegionalReadActions"
-    effect = "Allow"
-
-    actions = [
-      "ec2:DescribeCapacityReservations",
-      "ec2:DescribeImages",
-      "ec2:DescribeInstances",
-      "ec2:DescribeInstanceTypeOfferings",
-      "ec2:DescribeInstanceTypes",
-      "ec2:DescribeLaunchTemplates",
-      "ec2:DescribeSecurityGroups",
-      "ec2:DescribeSpotPriceHistory",
-      "ec2:DescribeSubnets"
-    ]
-
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestedRegion"
-      values   = [data.aws_region.current.id]
-    }
-  }
-
-  statement {
-    sid     = "AllowSSMReadActions"
-    effect  = "Allow"
-    actions = ["ssm:GetParameter"]
-    resources = [
-      "arn:aws:ssm:${data.aws_region.current.id}::parameter/aws/service/*"
-    ]
-  }
-
-  statement {
-    sid       = "AllowPricingReadActions"
-    effect    = "Allow"
-    actions   = ["pricing:GetProducts"]
-    resources = ["*"]
-  }
-
-  statement {
-    sid       = "AllowUnscopedInstanceProfileListAction"
-    effect    = "Allow"
-    actions   = ["iam:ListInstanceProfiles"]
-    resources = ["*"]
-  }
-
-  statement {
-    sid     = "AllowInstanceProfileReadActions"
-    effect  = "Allow"
-    actions = ["iam:GetInstanceProfile"]
-
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/*"
-    ]
-  }
+resource "aws_iam_role_policy" "swan_karpenter_node_lifecycle_iam_role_policy" {
+  name = "${var.swan_eks_cluster_name}-swan_karpenter_node_lifecycle_iam_role_policy"
+  role = aws_iam_role.swan_karpenter_iam_role.name
+  policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_node_lifecycle_iam_role_policy.json.tpl", {
+    swan_aws_region       = data.aws_region.current.id
+    swan_eks_cluster_name = var.swan_eks_cluster_name
+  })
 }
 
-resource "aws_iam_role_policy" "swan_karpenter_iam_role_policy" {
-  name   = "${var.swan_eks_cluster_name}-swan_karpenter_iam_role_policy"
-  role   = aws_iam_role.swan_karpenter_iam_role.name
-  policy = data.aws_iam_policy_document.swan_karpenter_iam_policy_document.json
+resource "aws_iam_role_policy" "swan_karpenter_iam_integration_iam_role_policy" {
+  name = "${var.swan_eks_cluster_name}-swan_karpenter_iam_integration_iam_role_policy"
+  role = aws_iam_role.swan_karpenter_iam_role.name
+  policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_iam_integration_iam_role_policy.json.tpl", {
+    swan_aws_account_id        = data.aws_caller_identity.current.account_id
+    swan_aws_region            = data.aws_region.current.id
+    swan_eks_node_iam_role_arn = aws_iam_role.swan_eks_node_iam_role.arn
+    swan_eks_cluster_name      = var.swan_eks_cluster_name
+  })
+}
+
+resource "aws_iam_role_policy" "swan_karpenter_eks_integration_iam_role_policy" {
+  name = "${var.swan_eks_cluster_name}-swan_karpenter_eks_integration_iam_role_policy"
+  role = aws_iam_role.swan_karpenter_iam_role.name
+  policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_eks_integration_iam_role_policy.json.tpl", {
+    swan_aws_account_id   = data.aws_caller_identity.current.account_id
+    swan_aws_region       = data.aws_region.current.id
+    swan_eks_cluster_name = var.swan_eks_cluster_name
+  })
+}
+
+resource "aws_iam_role_policy" "swan_karpenter_interruption_iam_role_policy" {
+  name = "${var.swan_eks_cluster_name}-swan_karpenter_interruption_iam_role_policy"
+  role = aws_iam_role.swan_karpenter_iam_role.name
+  policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_interruption_iam_role_policy.json.tpl", {
+    swan_karpenter_interruption_sqs_queue_arn = aws_sqs_queue.swan_karpenter_interruption_sqs_queue.arn
+  })
+}
+
+resource "aws_iam_role_policy" "swan_karpenter_resource_discovery_iam_role_policy" {
+  name = "${var.swan_eks_cluster_name}-swan_karpenter_resource_discovery_iam_role_policy"
+  role = aws_iam_role.swan_karpenter_iam_role.name
+  policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_resource_discovery_iam_role_policy.json.tpl", {
+    swan_aws_account_id = data.aws_caller_identity.current.account_id
+    swan_aws_region     = data.aws_region.current.id
+  })
 }
 
 resource "aws_eks_pod_identity_association" "swan_karpenter_pod_identity_association" {
