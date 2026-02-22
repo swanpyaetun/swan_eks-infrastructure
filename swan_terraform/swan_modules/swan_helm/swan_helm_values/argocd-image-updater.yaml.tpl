@@ -20,7 +20,7 @@ serviceAccount:
   name: argocd-image-updater
 
 nodeSelector:
-  workload-type = "system"
+  workload-type: "system"
 
 tolerations:
 - key: "workload-type"

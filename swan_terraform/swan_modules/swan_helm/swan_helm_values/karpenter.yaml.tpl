@@ -3,7 +3,7 @@ serviceAccount:
   name: karpenter
 
 nodeSelector:
-  workload-type = "system"
+  workload-type: "system"
 
 tolerations:
 - key: "workload-type"
