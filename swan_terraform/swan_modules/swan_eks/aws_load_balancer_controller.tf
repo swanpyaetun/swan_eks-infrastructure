@@ -1,6 +1,6 @@
 # AWS Load Balancer Controller IAM Role
 resource "aws_iam_role" "swan_aws_load_balancer_controller_iam_role" {
-  name = "${var.swan_eks_cluster_name}-swan_aws_load_balancer_controller_iam_role"
+  name = "swan_aws_load_balancer_controller_iam_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -18,7 +18,7 @@ resource "aws_iam_role" "swan_aws_load_balancer_controller_iam_role" {
 }
 
 resource "aws_iam_role_policy" "swan_aws_load_balancer_controller_iam_role_policy" {
-  name   = "${var.swan_eks_cluster_name}-swan_aws_load_balancer_controller_iam_role_policy"
+  name   = "swan_aws_load_balancer_controller_iam_role_policy"
   role   = aws_iam_role.swan_aws_load_balancer_controller_iam_role.name
   policy = file("${path.module}/swan_iam_role_policies/swan_aws_load_balancer_controller_iam_role_policy.json")
 }
