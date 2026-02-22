@@ -10,14 +10,6 @@ resource "aws_eks_addon" "swan_vpc_cni_eks_addon" {
       ENABLE_PREFIX_DELEGATION = "true"
     }
     enableNetworkPolicy = "true"
-    tolerations = [
-      {
-        key      = "workload-type"
-        operator = "Equal"
-        value    = "system"
-        effect   = "NoSchedule"
-      }
-    ]
   })
 
   depends_on = [aws_eks_node_group.swan_system_eks_node_group]
@@ -53,19 +45,7 @@ resource "aws_eks_addon" "swan_kube_proxy_eks_addon" {
   addon_version               = var.swan_kube_proxy_eks_addon_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-
-  configuration_values = jsonencode({
-    tolerations = [
-      {
-        key      = "workload-type"
-        operator = "Equal"
-        value    = "system"
-        effect   = "NoSchedule"
-      }
-    ]
-  })
-
-  depends_on = [aws_eks_node_group.swan_system_eks_node_group]
+  depends_on                  = [aws_eks_node_group.swan_system_eks_node_group]
 }
 
 resource "aws_eks_addon" "swan_eks_pod_identity_agent_eks_addon" {
@@ -74,17 +54,5 @@ resource "aws_eks_addon" "swan_eks_pod_identity_agent_eks_addon" {
   addon_version               = var.swan_eks_pod_identity_agent_eks_addon_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-
-  configuration_values = jsonencode({
-    tolerations = [
-      {
-        key      = "workload-type"
-        operator = "Equal"
-        value    = "system"
-        effect   = "NoSchedule"
-      }
-    ]
-  })
-
-  depends_on = [aws_eks_node_group.swan_system_eks_node_group]
+  depends_on                  = [aws_eks_node_group.swan_system_eks_node_group]
 }
