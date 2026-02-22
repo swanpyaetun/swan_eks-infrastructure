@@ -36,9 +36,7 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
     bootstrap_cluster_creator_admin_permissions = false
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.swan_eks_cluster_iam_role_policy_attachment
-  ]
+  depends_on = [aws_iam_role_policy_attachment.swan_eks_cluster_iam_role_policy_attachment]
 }
 
 # EKS Node IAM Role
@@ -88,16 +86,14 @@ resource "aws_eks_node_group" "swan_system_eks_node_group" {
   }
 
   labels = {
-    system = "true"
+    workload-type = "system"
   }
 
   taint {
-    key    = "system"
-    value  = "true"
+    key    = "workload-type"
+    value  = "system"
     effect = "NO_SCHEDULE"
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.swan_eks_node_iam_role_policy_attachment
-  ]
+  depends_on = [aws_iam_role_policy_attachment.swan_eks_node_iam_role_policy_attachment]
 }

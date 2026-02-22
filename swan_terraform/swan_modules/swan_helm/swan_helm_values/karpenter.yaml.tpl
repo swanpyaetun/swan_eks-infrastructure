@@ -3,12 +3,12 @@ serviceAccount:
   name: karpenter
 
 nodeSelector:
-  system: "true"
+  workload-type = "system"
 
 tolerations:
-- key: "system"
+- key: "workload-type"
   operator: "Equal"
-  value: "true"
+  value: "system"
   effect: "NoSchedule"
 
 settings:

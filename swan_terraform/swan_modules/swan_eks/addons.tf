@@ -12,13 +12,15 @@ resource "aws_eks_addon" "swan_vpc_cni_eks_addon" {
     enableNetworkPolicy = "true"
     tolerations = [
       {
-        key      = "system"
+        key      = "workload-type"
         operator = "Equal"
-        value    = "true"
+        value    = "system"
         effect   = "NoSchedule"
       }
     ]
   })
+
+  depends_on = [aws_eks_node_group.swan_system_eks_node_group]
 }
 
 resource "aws_eks_addon" "swan_coredns_eks_addon" {
@@ -30,17 +32,19 @@ resource "aws_eks_addon" "swan_coredns_eks_addon" {
 
   configuration_values = jsonencode({
     nodeSelector = {
-      system = "true"
+      workload-type = "system"
     }
     tolerations = [
       {
-        key      = "system"
+        key      = "workload-type"
         operator = "Equal"
-        value    = "true"
+        value    = "system"
         effect   = "NoSchedule"
       }
     ]
   })
+
+  depends_on = [aws_eks_node_group.swan_system_eks_node_group]
 }
 
 resource "aws_eks_addon" "swan_kube_proxy_eks_addon" {
@@ -53,13 +57,15 @@ resource "aws_eks_addon" "swan_kube_proxy_eks_addon" {
   configuration_values = jsonencode({
     tolerations = [
       {
-        key      = "system"
+        key      = "workload-type"
         operator = "Equal"
-        value    = "true"
+        value    = "system"
         effect   = "NoSchedule"
       }
     ]
   })
+
+  depends_on = [aws_eks_node_group.swan_system_eks_node_group]
 }
 
 resource "aws_eks_addon" "swan_eks_pod_identity_agent_eks_addon" {
@@ -72,11 +78,13 @@ resource "aws_eks_addon" "swan_eks_pod_identity_agent_eks_addon" {
   configuration_values = jsonencode({
     tolerations = [
       {
-        key      = "system"
+        key      = "workload-type"
         operator = "Equal"
-        value    = "true"
+        value    = "system"
         effect   = "NoSchedule"
       }
     ]
   })
+
+  depends_on = [aws_eks_node_group.swan_system_eks_node_group]
 }
