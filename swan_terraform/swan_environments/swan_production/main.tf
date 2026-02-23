@@ -1,3 +1,9 @@
+module "swan_ecr" {
+  source                    = "../../swan_modules/swan_ecr"
+  swan_ecr_namespace        = var.swan_ecr_namespace
+  swan_ecr_repository_names = var.swan_ecr_repository_names
+}
+
 module "swan_vpc" {
   source                          = "../../swan_modules/swan_vpc"
   swan_vpc_cidr_block             = var.swan_vpc_cidr_block
@@ -32,10 +38,4 @@ module "swan_helm" {
   swan_eks_cluster_endpoint                  = module.swan_eks.swan_eks_cluster_endpoint
   swan_karpenter_interruption_sqs_queue_name = module.swan_eks.swan_karpenter_interruption_sqs_queue_name
   depends_on                                 = [module.swan_eks]
-}
-
-module "swan_ecr" {
-  source                    = "../../swan_modules/swan_ecr"
-  swan_ecr_namespace        = var.swan_ecr_namespace
-  swan_ecr_repository_names = var.swan_ecr_repository_names
 }

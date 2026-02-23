@@ -1,3 +1,12 @@
+# swan_ecr
+variable "swan_ecr_namespace" {
+  type = string
+}
+
+variable "swan_ecr_repository_names" {
+  type = list(string)
+}
+
 # swan_vpc
 variable "swan_vpc_cidr_block" {
   type = string
@@ -69,13 +78,4 @@ variable "swan_eks_pod_identity_agent_eks_addon_version" {
 variable "swan_ci_iam_role_arn" {
   type      = string
   sensitive = true
-}
-
-# swan_ecr
-variable "swan_ecr_namespace" {
-  type = string
-}
-
-variable "swan_ecr_repository_names" {
-  type = list(string)
 }

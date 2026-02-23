@@ -1,3 +1,28 @@
+# swan_ecr
+swan_ecr_namespace = "swan_polyglot-microservices-application"
+swan_ecr_repository_names = [
+  "accounting",
+  "ad",
+  "cart",
+  "checkout",
+  "currency",
+  "email",
+  "flagd",
+  "fraud-detection",
+  "frontend",
+  "frontend-proxy",
+  "image-provider",
+  "kafka",
+  "llm",
+  "load-generator",
+  "payment",
+  "product-catalog",
+  "product-reviews",
+  "quote",
+  "recommendation",
+  "shipping"
+]
+
 # swan_vpc
 swan_vpc_cidr_block            = "10.0.0.0/16"
 swan_availability_zones        = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
@@ -23,28 +48,3 @@ swan_vpc_cni_eks_addon_version                = "v1.21.1-eksbuild.3"
 swan_coredns_eks_addon_version                = "v1.13.2-eksbuild.1"
 swan_kube_proxy_eks_addon_version             = "v1.35.0-eksbuild.2"
 swan_eks_pod_identity_agent_eks_addon_version = "v1.3.10-eksbuild.2"
-
-# swan_ecr
-swan_ecr_namespace = "swan_polyglot-microservices-application"
-swan_ecr_repository_names = [
-  "accounting",
-  "ad",
-  "cart",
-  "checkout",
-  "currency",
-  "email",
-  "flagd",
-  "fraud-detection",
-  "frontend",
-  "frontend-proxy",
-  "image-provider",
-  "kafka",
-  "llm",
-  "load-generator",
-  "payment",
-  "product-catalog",
-  "product-reviews",
-  "quote",
-  "recommendation",
-  "shipping"
-]
