@@ -8,9 +8,9 @@ S3 bucket is used as backend storage for Terraform remote state.
 
 Bucket Versioning is enabled for state recovery in the case of accidental deletions and human error.
 
-S3 bucket is secured by implementing the following practices:<br>
-1. Block all public access<br>
-2. Enable Bucket Versioning<br>
+S3 bucket is secured by implementing the following practices:
+1. Block all public access
+2. Enable Bucket Versioning
 3. Enable SSE-S3 (Default encryption)
 
 ### 1.2. IAM Role for GitHub Actions to authenticate to AWS
@@ -21,8 +21,8 @@ IAM Role is configured to trust GitHub OIDC provider, swanpyaetun organization, 
 
 GitHub Actions can now assume IAM Role. 
 
-GitHub Actions authentication to AWS is secured by implementing the following practices:<br>
-1. Not storing long-lived IAM user credentials in GitHub<br>
+GitHub Actions authentication to AWS is secured by implementing the following practices:
+1. Not storing long-lived IAM user credentials in GitHub
 2. Using short-lived OIDC tokens with automatic expiration
 
 ## 2. GitHub Actions
