@@ -39,9 +39,26 @@ on:
       - main
   workflow_dispatch:
 ```
-"Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:<br>
-The CI/CD pipeline runs when a pull request is opened against the main branch.<br>
-The CI/CD pipeline runs when a direct push is made to the main branch.<br>
-Go to swanpyaetun/swan_eks-infrastructure repository -> Actions -> Provision AWS Infrastructure using Terraform -> Run workflow. Click "Run workflow" to run the CI/CD pipeline.
+"Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
+1. The CI/CD pipeline runs when a pull request is opened against the main branch.
+2. The CI/CD pipeline runs when a direct push is made to the main branch.
+3. Go to swanpyaetun/swan_eks-infrastructure repository -> Actions -> Provision AWS Infrastructure using Terraform -> Run workflow. Click "Run workflow" to run the CI/CD pipeline.
 
 swan_terraform_plan job does the following steps:
+1. checkout repository
+2. set up terraform in the runner
+3. configure aws credentials using oidc
+4. terraform init
+5. check terraform format
+6. check whether the configuration is valid
+7. terraform plan and generate terraform plan file
+8. upload terraform plan file only if the event is push or manually triggered
+
+swan_terraform_apply job runs after swan_terraform_plan job succeeds. swan_terraform_apply job runs only if the event is push or manually triggered. swan_terraform_apply job does the following steps:
+1. checkout repository
+2. set up terraform in the runner
+3. configure aws credentials using oidc
+4. terraform init
+5. download terraform plan file
+6. create terraform resources using terraform plan file
+Terraform plan file is used so that only reviewed resources during plan stage are applied, and no modification is done between plan and apply stage.
