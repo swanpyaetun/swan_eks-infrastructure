@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "swan_ecr_repositories" {
   force_delete = true
 }
 
-resource "aws_ecr_lifecycle_policy" "swan_ecr_lifecycle_policy" {
+resource "aws_ecr_lifecycle_policy" "swan_ecr_lifecycle_policies" {
   for_each   = aws_ecr_repository.swan_ecr_repositories
   repository = each.value.name
 
