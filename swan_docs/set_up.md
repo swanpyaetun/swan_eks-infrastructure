@@ -4,11 +4,10 @@
 
 ### 1.1. Create S3 bucket for Terraform remote state
 
-```text
-In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations:
-General configuration:
+In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations:  
+General configuration:  
     Bucket type: General purpose
-    Bucket name: swan-production-terraform-backend
+    Bucket name: swan-production-terraform-backend  
 Object Ownership:
     Object Ownership: ACLs disabled (recommended)
 Block Public Access settings for this bucket:
@@ -21,7 +20,6 @@ Tags:
 Default encryption:
     Encryption type: Server-side encryption with Amazon S3 managed keys (SSE-S3)
     Bucket Key: Enable
-```
 
 ### 1.2. Create IAM Role for GitHub Actions to authenticate to AWS
 
