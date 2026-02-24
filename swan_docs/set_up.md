@@ -4,6 +4,7 @@
 
 ### 1.1. Create S3 bucket for Terraform remote state
 
+```text
 In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations:
 General configuration:
     Bucket type: General purpose
@@ -20,6 +21,7 @@ Tags:
 Default encryption:
     Encryption type: Server-side encryption with Amazon S3 managed keys (SSE-S3)
     Bucket Key: Enable
+```
 
 ### 1.2. Create IAM Role for GitHub Actions to authenticate to AWS
 
