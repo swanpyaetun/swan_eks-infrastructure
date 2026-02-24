@@ -4,10 +4,10 @@
 
 ### 1.1. Create S3 bucket for Terraform remote state
 
-In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations:  
-General configuration:  
-    Bucket type: General purpose
-    Bucket name: swan-production-terraform-backend  
+In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations: <br>
+General configuration: <br>
+> Bucket type: General purpose <br>
+> Bucket name: swan-production-terraform-backend <br>
 Object Ownership:
     Object Ownership: ACLs disabled (recommended)
 Block Public Access settings for this bucket:
