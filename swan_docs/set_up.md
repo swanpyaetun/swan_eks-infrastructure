@@ -105,3 +105,22 @@ provider "aws" {
 ### 3.3. Set Terraform variable values
 
 In swan_terraform/swan_environments/swan_production/prod.tfvars, set the values for Terraform variables.
+
+## 4. GitHub Actions CI/CD pipelines
+
+### 4.1. Run "Provision AWS Infrastructure using Terraform" pipeline
+
+"Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways.
+
+1.<br>
+The CI/CD pipeline runs when a pull request is opened against the main branch.
+
+2.<br>
+The CI/CD pipeline runs when a direct push is made to the main branch.
+
+3.<br>
+Go to swanpyaetun/swan_eks-infrastructure repository -> Actions -> Provision AWS Infrastructure using Terraform -> Run workflow. Click "Run workflow" to run the CI/CD pipeline.
+
+### 4.2. Run "Terraform Destroy" pipeline
+
+Go to swanpyaetun/swan_eks-infrastructure repository -> Actions -> Terraform Destroy -> Run workflow. Click "Run workflow" to run "Terraform Destroy" pipeline.
