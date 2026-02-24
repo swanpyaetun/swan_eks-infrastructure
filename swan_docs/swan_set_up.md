@@ -1,5 +1,21 @@
 # Instructions to set up the project
 
+## Table of Contents
+
+- [1. AWS](#1-aws)
+  - [1.1. Create S3 bucket for Terraform remote state](#11-create-s3-bucket-for-terraform-remote-state)
+  - [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
+- [2. GitHub Actions](#2-github-actions)
+  - [2.1. Create repository secret](#21-create-repository-secret)
+  - [2.2. Set environment variable](#22-set-environment-variable)
+- [3. Terraform](#3-terraform)
+  - [3.1. Configure Terraform remote state](#31-configure-terraform-remote-state)
+  - [3.2. Configure Terraform provider](#32-configure-terraform-provider)
+  - [3.3. Set Terraform variable values](#33-set-terraform-variable-values)
+- [4. GitHub Actions CI/CD pipelines](#4-github-actions-cicd-pipelines)
+  - [4.1. Run "Provision AWS Infrastructure using Terraform" pipeline](#41-run-provision-aws-infrastructure-using-terraform-pipeline)
+  - [4.2. Run "Terraform Destroy" pipeline](#42-run-terraform-destroy-pipeline)
+
 ## 1. AWS
 
 ### 1.1. Create S3 bucket for Terraform remote state
@@ -19,7 +35,7 @@ Tags:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Environment: Production<br>
 Default encryption:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Encryption type: Server-side encryption with Amazon S3 managed keys (SSE-S3)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Bucket Key: Enable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Bucket Key: Enable
 
 ### 1.2. Create IAM Role for GitHub Actions to authenticate to AWS
 
@@ -30,7 +46,7 @@ Provider details:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Audience: sts.amazonaws.com<br>
 Tags:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Project: swan_eks-infrastructure<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Environment: Production<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Environment: Production
 
 In AWS Management Console, create an IAM Role with the following configurations:<br>
 Trusted entity type:<br>
@@ -46,7 +62,7 @@ Role details:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Role name: swan_githubactions_terraform<br>
 Tags:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Project: swan_eks-infrastructure<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Environment: Production<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Environment: Production
 
 ## 2. GitHub Actions
 
@@ -56,7 +72,7 @@ Go to swanpyaetun/swan_eks-infrastructure repository -> Settings -> Secrets and 
 
 Create a new repository secret:<br>
 Name: SWAN_CI_IAM_ROLE_ARN<br>
-Secret: swan_githubactions_terraform IAM Role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)<br>
+Secret: swan_githubactions_terraform IAM Role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
 
 ### 2.2. Set environment variable
 
@@ -73,7 +89,7 @@ env:
 In swan_terraform/swan_environments/swan_production/backend.tf, set the following for "s3" backend:<br>
 [bucket: "swan-production-terraform-backend"](#11-create-s3-bucket-for-terraform-remote-state)<br>
 key: "swan_production/terraform.tfstate"<br>
-[region: "ap-southeast-1"](#11-create-s3-bucket-for-terraform-remote-state)<br>
+[region: "ap-southeast-1"](#11-create-s3-bucket-for-terraform-remote-state)
 ```hcl
 terraform {
   backend "s3" {
