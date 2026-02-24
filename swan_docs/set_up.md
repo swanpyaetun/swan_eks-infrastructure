@@ -6,8 +6,8 @@
 
 In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations: <br>
 General configuration: <br>
-> Bucket type: General purpose <br>
-> Bucket name: swan-production-terraform-backend <br>
+&nbsp;&nbsp;&nbsp;&nbsp; Bucket type: General purpose <br>
+&nbsp;&nbsp;&nbsp;&nbsp; Bucket name: swan-production-terraform-backend <br>
 Object Ownership:
     Object Ownership: ACLs disabled (recommended)
 Block Public Access settings for this bucket:
