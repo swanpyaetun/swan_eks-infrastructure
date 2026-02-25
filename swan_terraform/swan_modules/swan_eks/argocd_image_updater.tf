@@ -6,13 +6,13 @@ resource "aws_iam_role" "swan_argocd_image_updater_iam_role" {
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
+      Principal = {
+        Service = "pods.eks.amazonaws.com"
+      }
       Action = [
         "sts:AssumeRole",
         "sts:TagSession"
       ]
-      Principal = {
-        Service = "pods.eks.amazonaws.com"
-      }
     }]
   })
 }

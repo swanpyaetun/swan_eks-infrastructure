@@ -129,8 +129,8 @@ In swan_terraform/swan_environments/swan_production/prod.tfvars, set the values 
 "Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
-3. Go to swanpyaetun/swan_eks-infrastructure repository -> Actions -> Provision AWS Infrastructure using Terraform -> Run workflow. Click "Run workflow" to run the CI/CD pipeline.
+3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform -> Run workflow. Click "Run workflow" to run the CI/CD pipeline.
 
 ### 4.2. Run "Terraform Destroy" pipeline
 
-Go to swanpyaetun/swan_eks-infrastructure repository -> Actions -> Terraform Destroy -> Run workflow. Click "Run workflow" to run "Terraform Destroy" pipeline.
+In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy -> Run workflow. Click "Run workflow" to run "Terraform Destroy" pipeline.

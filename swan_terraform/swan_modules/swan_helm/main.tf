@@ -11,7 +11,7 @@ resource "helm_release" "swan_argocd_helm_release" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
-  version          = "9.4.1"
+  version          = "9.4.4"
   namespace        = "argocd"
   create_namespace = true
   values           = [file("${path.module}/swan_helm_values/argocd.yaml")]
@@ -26,7 +26,7 @@ resource "helm_release" "swan_argocd_image_updater_helm_release" {
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argocd-image-updater"
-  version    = "1.1.0"
+  version    = "1.1.1"
   namespace  = "argocd"
 
   values = [
@@ -43,7 +43,7 @@ resource "helm_release" "swan_aws_load_balancer_controller_helm_release" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
-  version    = "3.0.0"
+  version    = "3.1.0"
   namespace  = "kube-system"
 
   values = [

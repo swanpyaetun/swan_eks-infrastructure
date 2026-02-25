@@ -6,10 +6,13 @@ resource "aws_iam_role" "swan_eks_cluster_iam_role" {
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
-      Action = "sts:AssumeRole"
       Principal = {
         Service = "eks.amazonaws.com"
       }
+      Action = [
+        "sts:AssumeRole",
+        "sts:TagSession"
+      ]
     }]
   })
 }
@@ -36,6 +39,10 @@ resource "aws_eks_cluster" "swan_eks_cluster" {
     bootstrap_cluster_creator_admin_permissions = false
   }
 
+  upgrade_policy {
+    support_type = "STANDARD"
+  }
+
   depends_on = [aws_iam_role_policy_attachment.swan_eks_cluster_iam_role_policy_attachment]
 }
 
@@ -47,10 +54,10 @@ resource "aws_iam_role" "swan_eks_node_iam_role" {
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
-      Action = "sts:AssumeRole"
       Principal = {
         Service = "ec2.amazonaws.com"
       }
+      Action = "sts:AssumeRole"
     }]
   })
 }
@@ -83,6 +90,13 @@ resource "aws_eks_node_group" "swan_system_eks_node_group" {
 
   update_config {
     max_unavailable = 1
+    update_strategy = "DEFAULT"
+  }
+
+  node_repair_config {
+    enabled                            = true
+    max_parallel_nodes_repaired_count  = 1
+    max_unhealthy_node_threshold_count = 5
   }
 
   labels = {

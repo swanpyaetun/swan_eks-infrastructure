@@ -56,3 +56,12 @@ resource "aws_eks_addon" "swan_eks_pod_identity_agent_eks_addon" {
   resolve_conflicts_on_update = "OVERWRITE"
   depends_on                  = [aws_eks_node_group.swan_system_eks_node_group]
 }
+
+resource "aws_eks_addon" "swan_eks_node_monitoring_agent_eks_addon" {
+  cluster_name                = aws_eks_cluster.swan_eks_cluster.name
+  addon_name                  = "eks-node-monitoring-agent"
+  addon_version               = var.swan_eks_node_monitoring_agent_eks_addon_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+  depends_on                  = [aws_eks_node_group.swan_system_eks_node_group]
+}

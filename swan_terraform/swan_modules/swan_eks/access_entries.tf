@@ -22,10 +22,10 @@ resource "aws_iam_role" "swan_eks_cluster_admin_iam_role" {
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
-      Action = "sts:AssumeRole"
       Principal = {
         AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
       }
+      Action = "sts:AssumeRole"
     }]
   })
 }

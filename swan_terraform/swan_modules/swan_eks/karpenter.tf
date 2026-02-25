@@ -24,16 +24,16 @@ resource "aws_sqs_queue_policy" "swan_karpenter_interruption_sqs_queue_policy" {
         Resource = aws_sqs_queue.swan_karpenter_interruption_sqs_queue.arn
       },
       {
-        Sid       = "DenyHTTP"
-        Effect    = "Deny"
-        Action    = "sqs:*"
-        Resource  = aws_sqs_queue.swan_karpenter_interruption_sqs_queue.arn
-        Principal = "*"
+        Sid      = "DenyHTTP"
+        Effect   = "Deny"
+        Action   = "sqs:*"
+        Resource = aws_sqs_queue.swan_karpenter_interruption_sqs_queue.arn
         Condition = {
           Bool = {
             "aws:SecureTransport" = "false"
           }
         }
+        Principal = "*"
       }
     ]
   })
@@ -99,13 +99,13 @@ resource "aws_iam_role" "swan_karpenter_iam_role" {
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
+      Principal = {
+        Service = "pods.eks.amazonaws.com"
+      }
       Action = [
         "sts:AssumeRole",
         "sts:TagSession"
       ]
-      Principal = {
-        Service = "pods.eks.amazonaws.com"
-      }
     }]
   })
 }

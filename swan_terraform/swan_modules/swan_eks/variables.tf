@@ -42,6 +42,10 @@ variable "swan_eks_pod_identity_agent_eks_addon_version" {
   type = string
 }
 
+variable "swan_eks_node_monitoring_agent_eks_addon_version" {
+  type = string
+}
+
 variable "swan_ci_iam_role_arn" {
   type      = string
   sensitive = true

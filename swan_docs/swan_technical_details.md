@@ -84,6 +84,8 @@ Container images in private ECR repositories are secured by implementing the fol
 
 ECR basic scanning is a free service. It only scans for OS vulnerabilities, not software vulnerabilities.
 
+To view ECR basic scanning result, in AWS Management Console, go to "Elastic Container Registry" -> Private registry -> Repositories. Choose a repository that has container image that you want to view ECR basic scanning result for. Choose an image that you want to view ECR basic scanning result for. Under "Scanning and vulnerabilities", you will see ECR basic scanning result for that image.
+
 ### 3.2. swan_terraform/swan_modules/swan_vpc
 
 swan_vpc module contains:
@@ -107,3 +109,57 @@ High availbility in NAT gateway is achieved by implementing the following practi
 Regional NAT Gateway with auto mode is enabled by not specifying availability_zone_address argument in aws_nat_gateway terraform resource. Regional NAT gateway with auto mode will automatically expand to new AZs and associate EIPs upon detection of an elastic network interface. This reduces management overhead.
 
 ### 3.3. swan_terraform/swan_modules/swan_eks
+
+swan_eks module contains:
+1. EKS cluster IAM role
+2. EKS cluster
+3. EKS node IAM role
+4. system EKS node group
+5. vpc-cni eks addon
+6. coredns eks addon
+7. kube-proxy eks addon
+8. eks-pod-identity-agent eks addon
+9. access entry for ci IAM role
+10. EKS cluster admin IAM role
+11. access entry for EKS cluster admin IAM role
+12. Argo CD image updater IAM role
+13. Argo CD image updater pod identity association
+14. AWS load balancer controller IAM role
+15. AWS load balancer controller pod identity association
+16. Karpenter interruption SQS queue
+17. Karpenter interruption SQS queue policy
+18. EventBridge rules
+19. Karpenter IAM role
+20. Karpenter pod identity association
+
+Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
+
+"ON_DEMAND" capacity_type is used for system EKS node group. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Taint and labels are applied to the system EKS node group, so that only system workloads can run on system EKS node group.
+
+vpc-cni eks addon enables pod networking within EKS cluster.
+
+ENABLE_PREFIX_DELEGATION = "true"
+
+Network policy is enabled in vpc-cni to enforce kubernetes network policies.
+
+coredns eks addon enables service discovery within EKS cluster.
+
+kube-proxy eks addon enables service networking within EKS cluster.
+
+eks-pod-identity-agent eks addon is used, so that IAM roles can be associated with kubernetes service accounts.
+
+eks-node-monitoring-agent eks addon enables automatic detection of node health issues, so more node conditions for EKS node auto repair can be detected.
+
+An access entry is created for ci IAM role, and AmazonEKSClusterAdminPolicy is assigned to ci IAM role.
+
+EKS cluster admin is created as an IAM role. An access entry is created for EKS cluster admin IAM role, and AmazonEKSClusterAdminPolicy is assigned to EKS cluster admin IAM role. 
+
+EKS cluster is secured by implementing the following practices:
+1. Envelope encryption is enabled in EKS cluster (Default)
+2. Enable private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC.
+3. Automatically giving cluster admin permissions to the cluster creator is disabled
+4. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
+
+Argo CD image updater IAM role is associated with "argocd-image-updater" service account in "argocd" namespace, using eks pod identity.
+
+AWS load balancer controller IAM role is associated with "aws-load-balancer-controller" service account in "kube-system" namespace, using eks pod identity.

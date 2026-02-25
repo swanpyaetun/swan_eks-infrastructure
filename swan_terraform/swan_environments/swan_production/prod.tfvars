@@ -38,13 +38,14 @@ swan_private_subnet_tags = {
 }
 
 # swan_eks
-swan_eks_cluster_name                         = "swan_production_eks_cluster"
-swan_eks_cluster_version                      = "1.35"
-swan_system_eks_node_group_instance_types     = ["t3.medium"]
-swan_system_eks_node_group_desired_size       = 2
-swan_system_eks_node_group_min_size           = 2
-swan_system_eks_node_group_max_size           = 2
-swan_vpc_cni_eks_addon_version                = "v1.21.1-eksbuild.3"
-swan_coredns_eks_addon_version                = "v1.13.2-eksbuild.1"
-swan_kube_proxy_eks_addon_version             = "v1.35.0-eksbuild.2"
-swan_eks_pod_identity_agent_eks_addon_version = "v1.3.10-eksbuild.2"
+swan_eks_cluster_name                            = "swan_production_eks_cluster"
+swan_eks_cluster_version                         = "1.35"
+swan_system_eks_node_group_instance_types        = ["t3.medium"]
+swan_system_eks_node_group_desired_size          = 2
+swan_system_eks_node_group_min_size              = 2
+swan_system_eks_node_group_max_size              = 2
+swan_vpc_cni_eks_addon_version                   = "v1.21.1-eksbuild.3"
+swan_coredns_eks_addon_version                   = "v1.13.2-eksbuild.1"
+swan_kube_proxy_eks_addon_version                = "v1.35.0-eksbuild.2"
+swan_eks_pod_identity_agent_eks_addon_version    = "v1.3.10-eksbuild.2"
+swan_eks_node_monitoring_agent_eks_addon_version = "v1.5.1-eksbuild.1"
