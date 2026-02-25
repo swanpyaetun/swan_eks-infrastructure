@@ -11,7 +11,7 @@ Bucket Versioning is enabled for state recovery in the case of accidental deleti
 S3 bucket is secured by implementing the following practices:
 1. Block all public access
 2. Enable Bucket Versioning
-3. Enable SSE-S3 (Default encryption)
+3. Enable SSE-S3 encryption type (Default encryption)
 
 ### 1.2. IAM Role for GitHub Actions to authenticate to AWS
 
@@ -72,8 +72,17 @@ Related resources are packaged into individual terraform modules, so that the sa
 ### 3.1. swan_terraform/swan_modules/swan_ecr
 
 swan_ecr module contains:
-1. ECR repositories
-2. ECR lifecycle policy for each ECR repository, which only keeps latest 30 container images
+1. private ECR repositories
+2. ECR lifecycle policy for each private ECR repository, which only keeps latest 30 container images
+3. ECR basic scanning for private ECR repositories
+
+Container images in private ECR repositories are secured by implementing the following practices:
+1. Using private ECR repositories
+2. Enable AES256 encryption_type (Default encryption) for private ECR repositories
+3. ECR basic scanning is configured (Default)
+4. SCAN_ON_PUSH is configured for private ECR repositories
+
+ECR basic scanning is a free service. It only scans for OS vulnerabilities, not software vulnerabilities.
 
 ### 3.2. swan_terraform/swan_modules/swan_vpc
 

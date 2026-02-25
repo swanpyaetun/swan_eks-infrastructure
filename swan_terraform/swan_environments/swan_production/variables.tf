@@ -1,9 +1,9 @@
 # swan_ecr
-variable "swan_ecr_namespace" {
+variable "swan_private_ecr_namespace" {
   type = string
 }
 
-variable "swan_ecr_repository_names" {
+variable "swan_private_ecr_repository_names" {
   type = list(string)
 }
 

@@ -1,7 +1,7 @@
 module "swan_ecr" {
-  source                    = "../../swan_modules/swan_ecr"
-  swan_ecr_namespace        = var.swan_ecr_namespace
-  swan_ecr_repository_names = var.swan_ecr_repository_names
+  source                            = "../../swan_modules/swan_ecr"
+  swan_private_ecr_namespace        = var.swan_private_ecr_namespace
+  swan_private_ecr_repository_names = var.swan_private_ecr_repository_names
 }
 
 module "swan_vpc" {

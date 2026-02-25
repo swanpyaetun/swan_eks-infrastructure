@@ -1,6 +1,6 @@
 # swan_ecr
-swan_ecr_namespace = "swan_polyglot-microservices-application"
-swan_ecr_repository_names = [
+swan_private_ecr_namespace = "swan_polyglot-microservices-application"
+swan_private_ecr_repository_names = [
   "accounting",
   "ad",
   "cart",
