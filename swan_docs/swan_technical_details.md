@@ -29,16 +29,6 @@ GitHub Actions authentication to AWS is secured by implementing the following pr
 
 ### 2.1. .github/workflows/swan_terraform.yml
 
-```yaml
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-```
 "Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
@@ -66,10 +56,6 @@ Terraform plan file is used so that only reviewed resources during plan stage ar
 
 ### 2.2. .github/workflows/swan_terraform_destroy.yml
 
-```yaml
-on:
-  workflow_dispatch:
-```
 "Terraform Destroy" pipeline runs when a user manually triggers it.
 
 swan_terraform_destroy job does the following steps:
@@ -106,7 +92,7 @@ Regional NAT gateway only allows outbound traffic from private subnets to intern
 Resources in private subnets are secured by implementing the following practices:
 1. Using regional NAT gateway to disable public access from the internet
 
-High availbility in NAT gateway is acheived by implementing the following practices:
+High availbility in NAT gateway is achieved by implementing the following practices:
 1. Using NAT gateway in Regional availability_mode
 
 Regional NAT Gateway with auto mode is enabled by not specifying availability_zone_address argument in aws_nat_gateway terraform resource. Regional NAT gateway with auto mode will automatically expand to new AZs and associate EIPs upon detection of an elastic network interface. This reduces management overhead.
