@@ -37,6 +37,30 @@ Default encryption:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Encryption type: Server-side encryption with Amazon S3 managed keys (SSE-S3)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Bucket Key: Enable
 
+To add S3 bucket policy to deny insecure http traffic, in AWS Management Console, go to "S3" -> Buckets -> General purpose buckets -> swan-production-terraform-backend -> Permissions -> Bucket policy. Click "Edit". Copy and paste the following json. Click "Save changes".
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DenyInsecureTransport",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::swan-production-terraform-backend",
+                "arn:aws:s3:::swan-production-terraform-backend/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        }
+    ]
+}
+```
+
 ### 1.2. Create IAM Role for GitHub Actions to authenticate to AWS
 
 In AWS Management Console, add an IAM Identity provider with the following configurations:<br>
@@ -68,7 +92,7 @@ Tags:<br>
 
 ### 2.1. Create repository secret
 
-Go to swanpyaetun/swan_eks-infrastructure repository -> Settings -> Secrets and variables -> Actions.
+In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.
 
 Create a new repository secret:<br>
 Name: SWAN_CI_IAM_ROLE_ARN<br>
@@ -129,8 +153,8 @@ In swan_terraform/swan_environments/swan_production/prod.tfvars, set the values 
 "Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
-3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform -> Run workflow. Click "Run workflow" to run the CI/CD pipeline.
+3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform. Click "Run workflow", and click "Run workflow" to run the CI/CD pipeline.
 
 ### 4.2. Run "Terraform Destroy" pipeline
 
-In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy -> Run workflow. Click "Run workflow" to run "Terraform Destroy" pipeline.
+In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy. Click "Run workflow", and click "Run workflow" to run "Terraform Destroy" pipeline.

@@ -12,6 +12,7 @@ S3 bucket is secured by implementing the following practices:
 1. Block all public access
 2. Enable Bucket Versioning
 3. Enable SSE-S3 encryption type (Default encryption)
+4. Deny insecure http traffic with S3 bucket policy
 
 ### 1.2. IAM Role for GitHub Actions to authenticate to AWS
 
@@ -132,15 +133,11 @@ swan_eks module contains:
 19. Karpenter IAM role
 20. Karpenter pod identity association
 
-Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
+EKS control plane cross-account ENIs are deployed in private subnets. Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
 
-"ON_DEMAND" capacity_type is used for system EKS node group. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Taint and labels are applied to the system EKS node group, so that only system workloads can run on system EKS node group.
+System EKS node group nodes are deployed in private subnets. "ON_DEMAND" capacity_type is used. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Taint and labels are applied to the system EKS node group, so that only system workloads can run on system EKS node group.
 
-vpc-cni eks addon enables pod networking within EKS cluster.
-
-ENABLE_PREFIX_DELEGATION = "true"
-
-Network policy is enabled in vpc-cni to enforce kubernetes network policies.
+vpc-cni eks addon enables pod networking within EKS cluster. Prefix Delegation is enabled to increase the number of IP addresses available to nodes and increase pod density per node. With Prefix Delegation enabled, vpc-cni assigns /28 (16 IP addresses) IPv4 address prefixes, instead of assigning individual IPv4 addresses to ENIs of the nodes. vpc-cni allocates IP addresses to pods from the prefixes assigned to ENIs. vpc-cni pre-allocates a prefix for faster pod startup by maintaining a warm pool. Network policy is enabled in vpc-cni to enforce kubernetes network policies.
 
 coredns eks addon enables service discovery within EKS cluster.
 
@@ -158,8 +155,23 @@ EKS cluster is secured by implementing the following practices:
 1. Envelope encryption is enabled in EKS cluster (Default)
 2. Enable private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC.
 3. Automatically giving cluster admin permissions to the cluster creator is disabled
-4. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
+4. System EKS node group nodes are deployed in private subnets
+5. vpc-cni enforcing kubernetes network policies
+6. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
 
 Argo CD image updater IAM role is associated with "argocd-image-updater" service account in "argocd" namespace, using eks pod identity.
 
 AWS load balancer controller IAM role is associated with "aws-load-balancer-controller" service account in "kube-system" namespace, using eks pod identity.
+
+Karpenter interruption SQS queue is secured by implementing the following practices:
+1. Encrypt data at rest by enabling SSE-SQS encryption type
+2. Encrypt data in transit (Default)
+3. Deny insecure http traffic with SQS queue policy
+
+SQS queue policy ensures only EventBridge and SQS services can send messages to SQS queue.
+
+EventBridge sends "AWS Health Event", "EC2 Spot Instance Interruption Warning", "EC2 Instance Rebalance Recommendation", and "EC2 Instance State-change Notification" events to the SQS queue. Karpenter reads the events from SQS queue.
+
+Karpenter IAM Role is associated with "karpenter" service account in "kube-system" namespace, using eks pod identity.
+
+### 3.4. swan_terraform/swan_modules/swan_helm
