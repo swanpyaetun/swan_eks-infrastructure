@@ -121,7 +121,6 @@ terraform {
     key          = "swan_production/terraform.tfstate"
     region       = "ap-southeast-1"
     use_lockfile = true # s3 state locking
-    encrypt      = true
   }
 }
 ```

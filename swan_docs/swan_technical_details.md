@@ -120,22 +120,23 @@ swan_eks module contains:
 6. coredns eks addon
 7. kube-proxy eks addon
 8. eks-pod-identity-agent eks addon
-9. access entry for ci IAM role
-10. EKS cluster admin IAM role
-11. access entry for EKS cluster admin IAM role
-12. Argo CD image updater IAM role
-13. Argo CD image updater pod identity association
-14. AWS load balancer controller IAM role
-15. AWS load balancer controller pod identity association
-16. Karpenter interruption SQS queue
-17. Karpenter interruption SQS queue policy
-18. EventBridge rules
-19. Karpenter IAM role
-20. Karpenter pod identity association
+9. eks-node-monitoring-agent eks addon
+10. access entry for ci IAM role
+11. EKS cluster admin IAM role
+12. access entry for EKS cluster admin IAM role
+13. Argo CD Image Updater IAM role
+14. Argo CD Image Updater pod identity association
+15. AWS Load Balancer Controller IAM role
+16. AWS Load Balancer Controller pod identity association
+17. Karpenter interruption SQS queue
+18. Karpenter interruption SQS queue policy
+19. EventBridge rules
+20. Karpenter IAM role
+21. Karpenter pod identity association
 
 EKS control plane cross-account ENIs are deployed in private subnets. Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
 
-System EKS node group nodes are deployed in private subnets. "ON_DEMAND" capacity_type is used. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Taint and labels are applied to the system EKS node group, so that only system workloads can run on system EKS node group.
+System EKS node group nodes are deployed in private subnets. "ON_DEMAND" capacity_type is used. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Label and taint are applied to the system EKS node group nodes, so that only system workloads can run on system EKS node group nodes.
 
 vpc-cni eks addon enables pod networking within EKS cluster. Prefix Delegation is enabled to increase the number of IP addresses available to nodes and increase pod density per node. With Prefix Delegation enabled, vpc-cni assigns /28 (16 IP addresses) IPv4 address prefixes, instead of assigning individual IPv4 addresses to ENIs of the nodes. vpc-cni allocates IP addresses to pods from the prefixes assigned to ENIs. vpc-cni pre-allocates a prefix for faster pod startup by maintaining a warm pool. Network policy is enabled in vpc-cni to enforce kubernetes network policies.
 
@@ -159,9 +160,9 @@ EKS cluster is secured by implementing the following practices:
 5. vpc-cni enforcing kubernetes network policies
 6. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
 
-Argo CD image updater IAM role is associated with "argocd-image-updater" service account in "argocd" namespace, using eks pod identity.
+Argo CD Image Updater IAM role is associated with "argocd-image-updater" service account in "argocd" namespace, using eks pod identity.
 
-AWS load balancer controller IAM role is associated with "aws-load-balancer-controller" service account in "kube-system" namespace, using eks pod identity.
+AWS Load Balancer Controller IAM role is associated with "aws-load-balancer-controller" service account in "kube-system" namespace, using eks pod identity.
 
 Karpenter interruption SQS queue is secured by implementing the following practices:
 1. Encrypt data at rest by enabling SSE-SQS encryption type
@@ -170,8 +171,77 @@ Karpenter interruption SQS queue is secured by implementing the following practi
 
 SQS queue policy ensures only EventBridge and SQS services can send messages to SQS queue.
 
-EventBridge sends "AWS Health Event", "EC2 Spot Instance Interruption Warning", "EC2 Instance Rebalance Recommendation", and "EC2 Instance State-change Notification" events to the SQS queue. Karpenter reads the events from SQS queue.
+EventBridge sends "AWS Health Event", "EC2 Spot Instance Interruption Warning", "EC2 Instance Rebalance Recommendation", and "EC2 Instance State-change Notification" events to the SQS queue. Karpenter reads the events from SQS queue. When Karpenter receives interruption events, it gracefully drains the affected node and provisions a replacement so workloads can be rescheduled.
 
 Karpenter IAM Role is associated with "karpenter" service account in "kube-system" namespace, using eks pod identity.
 
 ### 3.4. swan_terraform/swan_modules/swan_helm
+
+swan_helm module contains:
+1. Sealed Secrets
+2. Argo CD
+3. Argo CD Image Updater
+4. AWS Load Balancer Controller
+5. Metrics Server
+6. Karpenter
+
+Sealed Secrets encrypts kubernetes Secrets into “SealedSecrets” that are safe to store in git. Only the controller running in the cluster can decrypt them back into standard Secrets at runtime.
+
+Argo CD continuously synchronizes applications defined in git repository with the kubernetes cluster, ensuring the cluster state matches the declared configuration.
+
+Argo CD Image Updater monitors ECR for new container image tags, updates the container image references in the git repository, and allows argocd to deploy the updated tag to the kubernetes cluster.
+
+AWS Load Balancer Controller watches kubernetes ingress and service objects and creates or updates corresponding AWS load balancers (such as application load balancers and network load balancers).
+
+Metrics Server provides resource usage data (CPU, memory) for nodes and pods, for monitoring and auto-scaling workloads.
+
+Karpenter is a cluster autoscaler that automatically provisions and scales nodes based on workload demand. It observes pending pods and dynamically launches or terminates nodes to optimize cost, and resource utilization.
+
+nodeSelector and toleration are applied to the above resources, so that these resources can run on system EKS node group nodes.
+
+### 3.5. swan_terraform/swan_environments/swan_production/backend.tf
+
+```hcl
+terraform {
+  backend "s3" {
+    bucket       = "swan-production-terraform-backend"
+    key          = "swan_production/terraform.tfstate"
+    region       = "ap-southeast-1"
+    use_lockfile = true # s3 state locking
+  }
+}
+```
+S3 state locking is enabled for terraform S3 backend.
+
+### 3.5. swan_terraform/swan_environments/swan_production/prod.tfvars
+
+```hcl
+# swan_vpc
+swan_vpc_cidr_block            = "10.0.0.0/16"
+swan_availability_zones        = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+swan_public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+swan_public_subnet_tags = {
+  "kubernetes.io/role/elb" = "1"
+}
+swan_private_subnet_cidr_blocks = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
+swan_private_subnet_tags = {
+  "kubernetes.io/role/internal-elb" = "1"
+  # for Karpenter auto-discovery
+  "karpenter.sh/discovery" = "swan_production_eks_cluster"
+}
+```
+To have a lot of ip addresses, /16 is used for VPC which gives 65536 ip addresses, and /18 is used for private subnets which gives 16384 ip addresses per private subnet.
+
+Subnets are created across 3 availability zones.
+
+The public subnets tag "kubernetes.io/role/elb" signals AWS Load Balancer Controller in EKS cluster that these public subnets are for internet-facing load balancers.
+
+The private subnets tag "kubernetes.io/role/internal-elb" signals AWS Load Balancer Controller in EKS cluster that these private subnets are for internal load balancers. The private subnets tag "karpenter.sh/discovery" is for Karpenter auto-discovery, so Karpenter can launch EC2 nodes in these private subnets for swan_production_eks_cluster.
+
+```hcl
+swan_system_eks_node_group_desired_size = 2
+swan_system_eks_node_group_min_size     = 2
+swan_system_eks_node_group_max_size     = 2
+```
+High availbility in system EKS node group is achieved by implementing the following practices:
+1. Setting 2 nodes as minimum size, and 2 nodes as desired_size
