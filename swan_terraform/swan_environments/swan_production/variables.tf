@@ -83,3 +83,8 @@ variable "swan_ci_iam_role_arn" {
   type      = string
   sensitive = true
 }
+
+# swan_helm
+variable "swan_domain" {
+  type = string
+}

@@ -38,5 +38,6 @@ module "swan_helm" {
   swan_eks_cluster_name                      = var.swan_eks_cluster_name
   swan_eks_cluster_endpoint                  = module.swan_eks.swan_eks_cluster_endpoint
   swan_karpenter_interruption_sqs_queue_name = module.swan_eks.swan_karpenter_interruption_sqs_queue_name
+  swan_domain                                = var.swan_domain
   depends_on                                 = [module.swan_eks]
 }

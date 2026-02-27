@@ -14,3 +14,7 @@ variable "swan_eks_cluster_endpoint" {
 variable "swan_karpenter_interruption_sqs_queue_name" {
   type = string
 }
+
+variable "swan_domain" {
+  type = string
+}

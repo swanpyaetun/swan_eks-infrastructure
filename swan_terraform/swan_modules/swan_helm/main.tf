@@ -54,6 +54,20 @@ resource "helm_release" "swan_aws_load_balancer_controller_helm_release" {
   ]
 }
 
+resource "helm_release" "swan_external_dns_helm_release" {
+  name       = "external-dns"
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  chart      = "external-dns"
+  version    = "1.20.0"
+  namespace  = "kube-system"
+
+  values = [
+    templatefile("${path.module}/swan_helm_values/external-dns.yaml.tpl", {
+      swan_domain = var.swan_domain
+    })
+  ]
+}
+
 resource "helm_release" "swan_metrics_server_helm_release" {
   name       = "metrics-server"
   repository = "https://kubernetes-sigs.github.io/metrics-server/"
