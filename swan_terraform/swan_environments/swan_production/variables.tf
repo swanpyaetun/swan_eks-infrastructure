@@ -79,12 +79,11 @@ variable "swan_eks_node_monitoring_agent_eks_addon_version" {
   type = string
 }
 
+variable "swan_domain" {
+  type = string
+}
+
 variable "swan_ci_iam_role_arn" {
   type      = string
   sensitive = true
-}
-
-# swan_helm
-variable "swan_domain" {
-  type = string
 }

@@ -17,36 +17,40 @@ resource "aws_iam_role" "swan_external_dns_iam_role" {
   })
 }
 
+data "aws_route53_zone" "swan_route53_public_hosted_zone" {
+  name         = "${var.swan_domain}."
+  private_zone = false
+}
+
 resource "aws_iam_role_policy" "swan_external_dns_iam_role_policy" {
   name = "${var.swan_eks_cluster_name}-swan_external_dns_iam_role_policy"
   role = aws_iam_role.swan_external_dns_iam_role.name
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "route53:ChangeResourceRecordSets",
-            "route53:ListResourceRecordSets",
-            "route53:ListTagsForResources"
-          ],
-          "Resource" : [
-            "arn:aws:route53:::hostedzone/*"
-          ]
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "route53:ListHostedZones"
-          ],
-          "Resource" : [
-            "*"
-          ]
-        }
-      ]
-    }
-  )
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "route53:ChangeResourceRecordSets",
+          "route53:ListResourceRecordSets",
+          "route53:ListTagsForResources"
+        ]
+        Resource = [
+          "arn:aws:route53:::hostedzone/${data.aws_route53_zone.swan_route53_public_hosted_zone.zone_id}"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "route53:ListHostedZones"
+        ]
+        Resource = [
+          "*"
+        ]
+      }
+    ]
+  })
 }
 
 resource "aws_eks_pod_identity_association" "swan_external_dns_pod_identity_association" {

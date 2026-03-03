@@ -29,6 +29,7 @@ module "swan_eks" {
   swan_kube_proxy_eks_addon_version                = var.swan_kube_proxy_eks_addon_version
   swan_eks_pod_identity_agent_eks_addon_version    = var.swan_eks_pod_identity_agent_eks_addon_version
   swan_eks_node_monitoring_agent_eks_addon_version = var.swan_eks_node_monitoring_agent_eks_addon_version
+  swan_domain                                      = var.swan_domain
   swan_ci_iam_role_arn                             = var.swan_ci_iam_role_arn
 }
 
