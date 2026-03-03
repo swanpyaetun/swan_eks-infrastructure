@@ -5,6 +5,7 @@
 - [1. AWS](#1-aws)
   - [1.1. Create S3 bucket for Terraform remote state](#11-create-s3-bucket-for-terraform-remote-state)
   - [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
+  - [1.3. Route 53 domain and public hosted zone](#13-route-53-domain-and-public-hosted-zone)
 - [2. GitHub Actions](#2-github-actions)
   - [2.1. Create repository secret](#21-create-repository-secret)
   - [2.2. Set environment variable](#22-set-environment-variable)
@@ -87,6 +88,14 @@ Role details:<br>
 Tags:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Project: swan_eks-infrastructure<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Environment: Production
+
+### 1.3. Route 53 domain and public hosted zone
+
+A domain called "swanpyaetun.com" must be present in Route 53 Registered domains. A public hosted zone called "swanpyaetun.com" must be present in Route 53 Hosted zones. 
+
+Both the domain and the public hosted zone have the following tags:<br>
+Project: swan_eks-infrastructure<br>
+Environment: Production
 
 ## 2. GitHub Actions
 

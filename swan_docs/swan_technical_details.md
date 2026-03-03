@@ -1,5 +1,21 @@
 # Technical Details
 
+## Table of Contents
+
+- [1. AWS resources for Terraform and GitHub Actions](#1-aws-resources-for-terraform-and-github-actions)
+  - [1.1. S3 bucket for Terraform remote state](#11-s3-bucket-for-terraform-remote-state)
+  - [1.2. IAM Role for GitHub Actions to authenticate to AWS](#12-iam-role-for-github-actions-to-authenticate-to-aws)
+- [2. GitHub Actions](#2-github-actions)
+  - [2.1. .github/workflows/swan_terraform.yml](#21-githubworkflowsswan_terraformyml)
+  - [2.2. .github/workflows/swan_terraform_destroy.yml](#22-githubworkflowsswan_terraform_destroyyml)
+- [3. Terraform](#3-terraform)
+  - [3.1. swan_terraform/swan_modules/swan_ecr](#31-swan_terraformswan_modulesswan_ecr)
+  - [3.2. swan_terraform/swan_modules/swan_vpc](#32-swan_terraformswan_modulesswan_vpc)
+  - [3.3. swan_terraform/swan_modules/swan_eks](#33-swan_terraformswan_modulesswan_eks)
+  - [3.4. swan_terraform/swan_modules/swan_helm](#34-swan_terraformswan_modulesswan_helm)
+  - [3.5. swan_terraform/swan_environments/swan_production/backend.tf](#35-swan_terraformswan_environmentsswan_productionbackendtf)
+  - [3.6. swan_terraform/swan_environments/swan_production/prod.tfvars](#36-swan_terraformswan_environmentsswan_productionprodtfvars)
+
 ## 1. AWS resources for Terraform and GitHub Actions
 
 ### 1.1. S3 bucket for Terraform remote state
@@ -128,11 +144,13 @@ swan_eks module contains:
 14. Argo CD Image Updater pod identity association
 15. AWS Load Balancer Controller IAM role
 16. AWS Load Balancer Controller pod identity association
-17. Karpenter interruption SQS queue
-18. Karpenter interruption SQS queue policy
-19. EventBridge rules
-20. Karpenter IAM role
-21. Karpenter pod identity association
+17. External DNS IAM role
+18. External DNS pod identity association
+19. Karpenter interruption SQS queue
+20. Karpenter interruption SQS queue policy
+21. EventBridge rules
+22. Karpenter IAM role
+23. Karpenter pod identity association
 
 EKS control plane cross-account ENIs are deployed in private subnets. Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
 
@@ -164,6 +182,8 @@ Argo CD Image Updater IAM role is associated with "argocd-image-updater" service
 
 AWS Load Balancer Controller IAM role is associated with "aws-load-balancer-controller" service account in "kube-system" namespace, using eks pod identity.
 
+External DNS IAM role is associated with "external-dns" service account in "kube-system" namespace, using eks pod identity.
+
 Karpenter interruption SQS queue is secured by implementing the following practices:
 1. Encrypt data at rest by enabling SSE-SQS encryption type
 2. Encrypt data in transit (Default)
@@ -182,8 +202,9 @@ swan_helm module contains:
 2. Argo CD
 3. Argo CD Image Updater
 4. AWS Load Balancer Controller
-5. Metrics Server
-6. Karpenter
+5. External DNS
+6. Metrics Server
+7. Karpenter
 
 Sealed Secrets encrypts kubernetes Secrets into “SealedSecrets” that are safe to store in git. Only the controller running in the cluster can decrypt them back into standard Secrets at runtime.
 
@@ -193,11 +214,13 @@ Argo CD Image Updater monitors ECR for new container image tags, updates the con
 
 AWS Load Balancer Controller watches kubernetes ingress and service objects and creates or updates corresponding AWS load balancers (such as application load balancers and network load balancers).
 
+ExternalDNS automatically synchronizes kubernetes ingress and service hostnames with Route 53, creating, updating, and removing DNS records so they always reflect the current cluster state.
+
 Metrics Server provides resource usage data (CPU, memory) for nodes and pods, for monitoring and auto-scaling workloads.
 
 Karpenter is a cluster autoscaler that automatically provisions and scales nodes based on workload demand. It observes pending pods and dynamically launches or terminates nodes to optimize cost, and resource utilization.
 
-nodeSelector and toleration are applied to the above resources, so that these resources can run on system EKS node group nodes.
+nodeSelector and toleration are applied to the above resources, so that they can run on system EKS node group nodes.
 
 ### 3.5. swan_terraform/swan_environments/swan_production/backend.tf
 
@@ -213,7 +236,7 @@ terraform {
 ```
 S3 state locking is enabled for terraform S3 backend.
 
-### 3.5. swan_terraform/swan_environments/swan_production/prod.tfvars
+### 3.6. swan_terraform/swan_environments/swan_production/prod.tfvars
 
 ```hcl
 # swan_vpc
