@@ -6,16 +6,15 @@
   - [1.1. Create S3 bucket for Terraform remote state](#11-create-s3-bucket-for-terraform-remote-state)
   - [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
   - [1.3. Route 53 domain and public hosted zone](#13-route-53-domain-and-public-hosted-zone)
-- [2. GitHub Actions](#2-github-actions)
-  - [2.1. Create repository secret](#21-create-repository-secret)
-  - [2.2. Set environment variable](#22-set-environment-variable)
-- [3. Terraform](#3-terraform)
-  - [3.1. Configure Terraform remote state](#31-configure-terraform-remote-state)
-  - [3.2. Configure Terraform provider](#32-configure-terraform-provider)
-  - [3.3. Set Terraform variable values](#33-set-terraform-variable-values)
-- [4. GitHub Actions CI/CD pipelines](#4-github-actions-cicd-pipelines)
-  - [4.1. Run "Provision AWS Infrastructure using Terraform" pipeline](#41-run-provision-aws-infrastructure-using-terraform-pipeline)
-  - [4.2. Run "Terraform Destroy" pipeline](#42-run-terraform-destroy-pipeline)
+- [2. Terraform](#2-terraform)
+  - [2.1. Configure Terraform remote state](#21-configure-terraform-remote-state)
+  - [2.2. Configure Terraform provider](#22-configure-terraform-provider)
+  - [2.3. Set Terraform variable values](#23-set-terraform-variable-values)
+- [3. GitHub Actions](#3-github-actions)
+  - [3.1. Create repository secret](#31-create-repository-secret)
+  - [3.2. Set environment variable](#32-set-environment-variable)
+  - [3.3. How to run "Provision AWS Infrastructure using Terraform" pipeline](#33-how-to-run-provision-aws-infrastructure-using-terraform-pipeline)
+  - [3.4. How to run "Terraform Destroy" pipeline](#34-how-to-run-terraform-destroy-pipeline)
 
 ## 1. AWS
 
@@ -97,27 +96,9 @@ Both the domain and the public hosted zone have the following tags:<br>
 Project: swan_eks-infrastructure<br>
 Environment: Production
 
-## 2. GitHub Actions
+## 2. Terraform
 
-### 2.1. Create repository secret
-
-In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.
-
-Create a new repository secret:<br>
-Name: SWAN_CI_IAM_ROLE_ARN<br>
-Secret: swan_githubactions_terraform IAM Role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
-
-### 2.2. Set environment variable
-
-In .github/workflows/swan_terraform.yml and .github/workflows/swan_terraform_destroy.yml, set the following environment variable:
-```yaml
-env:
-  SWAN_AWS_REGION: "ap-southeast-1"
-```
-
-## 3. Terraform
-
-### 3.1. Configure Terraform remote state
+### 2.1. Configure Terraform remote state
 
 In swan_terraform/swan_environments/swan_production/backend.tf, set the following for "s3" backend:<br>
 [bucket: "swan-production-terraform-backend"](#11-create-s3-bucket-for-terraform-remote-state)<br>
@@ -134,7 +115,7 @@ terraform {
 }
 ```
 
-### 3.2. Configure Terraform provider
+### 2.2. Configure Terraform provider
 
 In swan_terraform/swan_environments/swan_production/providers.tf, set the following for "aws" provider:
 ```hcl
@@ -150,19 +131,35 @@ provider "aws" {
 }
 ```
 
-### 3.3. Set Terraform variable values
+### 2.3. Set Terraform variable values
 
 In swan_terraform/swan_environments/swan_production/prod.tfvars, set the values for Terraform variables.
 
-## 4. GitHub Actions CI/CD pipelines
+## 3. GitHub Actions
 
-### 4.1. Run "Provision AWS Infrastructure using Terraform" pipeline
+### 3.1. Create repository secret
+
+In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.
+
+Create a new repository secret:<br>
+Name: SWAN_CI_IAM_ROLE_ARN<br>
+Secret: swan_githubactions_terraform IAM Role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
+
+### 3.2. Set environment variable
+
+In .github/workflows/swan_terraform.yml and .github/workflows/swan_terraform_destroy.yml, set the following environment variable:
+```yaml
+env:
+  SWAN_AWS_REGION: "ap-southeast-1"
+```
+
+### 3.3. How to run "Provision AWS Infrastructure using Terraform" pipeline
 
 "Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
 3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform. Click "Run workflow", and click "Run workflow" to run the CI/CD pipeline.
 
-### 4.2. Run "Terraform Destroy" pipeline
+### 3.4. How to run "Terraform Destroy" pipeline
 
 In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy. Click "Run workflow", and click "Run workflow" to run "Terraform Destroy" pipeline.
