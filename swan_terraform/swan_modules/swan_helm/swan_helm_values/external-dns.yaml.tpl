@@ -11,5 +11,9 @@ tolerations:
   value: "system"
   effect: "NoSchedule"
 
+policy: sync
+
+txtOwnerId: ${swan_eks_cluster_name}
+
 domainFilters:
-  - ${swan_domain}
+- ${swan_domain}
