@@ -66,7 +66,7 @@ Container images in private ECR repositories are secured by implementing the fol
 
 ECR basic scanning is a free service. It only scans for OS vulnerabilities, not software vulnerabilities.
 
-To view ECR basic scanning result, in AWS Management Console, go to "Elastic Container Registry" -> Private registry -> Repositories. Choose a repository that has container image that you want to view ECR basic scanning result for. Choose an image that you want to view ECR basic scanning result for. Under "Scanning and vulnerabilities", you will see ECR basic scanning result for that image.
+To view ECR basic scanning result, in AWS Management Console, go to ap-southeast-1 region -> Elastic Container Registry -> Private registry -> Repositories. Choose a repository that has container image that you want to view ECR basic scanning result for. Choose an image that you want to view ECR basic scanning result for. Under "Scanning and vulnerabilities", you will see ECR basic scanning result for that image.
 
 ### 2.2. swan_terraform/swan_modules/swan_vpc
 

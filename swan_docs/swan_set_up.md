@@ -37,7 +37,7 @@ Default encryption:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Encryption type: Server-side encryption with Amazon S3 managed keys (SSE-S3)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Bucket Key: Enable
 
-To add S3 bucket policy to deny insecure http traffic, in AWS Management Console, go to "S3" -> Buckets -> General purpose buckets -> swan-production-terraform-backend -> Permissions -> Bucket policy. Click "Edit". Copy and paste the following json. Click "Save changes".
+To add S3 bucket policy to deny insecure http traffic, in AWS Management Console, go to ap-southeast-1 region -> S3 -> Buckets -> General purpose buckets -> swan-production-terraform-backend -> Permissions -> Bucket policy. Click "Edit". Copy and paste the following json. Click "Save changes".
 ```json
 {
     "Version": "2012-10-17",
