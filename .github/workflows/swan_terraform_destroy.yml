@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  SWAN_AWS_REGION: ap-southeast-1
+  SWAN_AWS_REGION: "ap-southeast-1"
   TF_VAR_swan_ci_iam_role_arn: ${{ secrets.SWAN_CI_IAM_ROLE_ARN }}
 
 permissions:

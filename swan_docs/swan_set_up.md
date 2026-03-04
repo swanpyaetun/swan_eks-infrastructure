@@ -150,7 +150,7 @@ Secret: swan_githubactions_terraform IAM Role arn from [1.2. Create IAM Role for
 In .github/workflows/swan_terraform.yml and .github/workflows/swan_terraform_destroy.yml, set the following environment variable:
 ```yaml
 env:
-  SWAN_AWS_REGION: ap-southeast-1
+  SWAN_AWS_REGION: "ap-southeast-1"
 ```
 
 ### 3.3. How to run "Provision AWS Infrastructure using Terraform" pipeline
