@@ -40,7 +40,7 @@ IAM Role is configured to trust GitHub OIDC provider, swanpyaetun organization, 
 GitHub Actions can now assume IAM Role. 
 
 GitHub Actions authentication to AWS is secured by implementing the following practices:
-1. Not storing long-lived IAM user credentials in GitHub
+1. Not storing long-lived IAM User credentials in GitHub
 2. Using short-lived OIDC tokens with automatic expiration
 
 ### 1.3. Route 53 domain and public hosted zone
@@ -141,7 +141,7 @@ EKS cluster is secured by implementing the following practices:
 3. Automatically giving cluster admin permissions to the cluster creator is disabled
 4. System EKS node group nodes are deployed in private subnets
 5. vpc-cni enforcing kubernetes network policies
-6. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
+6. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM User that have long-term credentials
 
 Argo CD Image Updater IAM role is associated with "argocd-image-updater" service account in "argocd" namespace, using eks pod identity.
 
