@@ -163,15 +163,12 @@ Karpenter IAM Role is associated with "karpenter" service account in "kube-syste
 ### 2.4. swan_terraform/swan_modules/swan_helm
 
 swan_helm module contains:
-1. Sealed Secrets
-2. Argo CD
-3. Argo CD Image Updater
-4. AWS Load Balancer Controller
-5. External DNS
-6. Metrics Server
-7. Karpenter
-
-Sealed Secrets encrypts kubernetes Secrets into “SealedSecrets” that are safe to store in git. Only the controller running in the cluster can decrypt them back into standard Secrets at runtime.
+1. Argo CD
+2. Argo CD Image Updater
+3. AWS Load Balancer Controller
+4. External DNS
+5. Metrics Server
+6. Karpenter
 
 Argo CD continuously synchronizes applications defined in git repository with the kubernetes cluster, ensuring the cluster state matches the declared configuration.
 

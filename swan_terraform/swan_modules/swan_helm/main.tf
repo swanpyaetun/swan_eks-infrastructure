@@ -1,12 +1,3 @@
-resource "helm_release" "swan_sealed_secrets_helm_release" {
-  name       = "sealed-secrets"
-  repository = "https://bitnami-labs.github.io/sealed-secrets/"
-  chart      = "sealed-secrets"
-  version    = "2.18.1"
-  namespace  = "kube-system"
-  values     = [file("${path.module}/swan_helm_values/sealed-secrets.yaml")]
-}
-
 resource "helm_release" "swan_argocd_helm_release" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
