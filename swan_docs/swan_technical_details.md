@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [1. AWS resources for Terraform and GitHub Actions](#1-aws-resources-for-terraform-and-github-actions)
+- [1. AWS](#1-aws)
   - [1.1. S3 bucket for Terraform remote state](#11-s3-bucket-for-terraform-remote-state)
   - [1.2. IAM Role for GitHub Actions to authenticate to AWS](#12-iam-role-for-github-actions-to-authenticate-to-aws)
   - [1.3. Route 53 domain and public hosted zone](#13-route-53-domain-and-public-hosted-zone)
@@ -17,7 +17,7 @@
   - [3.1. .github/workflows/swan_terraform.yml](#31-githubworkflowsswan_terraformyml)
   - [3.2. .github/workflows/swan_terraform_destroy.yml](#32-githubworkflowsswan_terraform_destroyyml)
 
-## 1. AWS resources for Terraform and GitHub Actions
+## 1. AWS
 
 ### 1.1. S3 bucket for Terraform remote state
 
