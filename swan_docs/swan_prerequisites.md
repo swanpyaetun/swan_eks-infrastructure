@@ -1,4 +1,4 @@
-# Instructions to set up the project
+# Prerequisites
 
 ## Table of Contents
 
@@ -13,8 +13,6 @@
 - [3. GitHub Actions](#3-github-actions)
   - [3.1. Create repository secret](#31-create-repository-secret)
   - [3.2. Set environment variable](#32-set-environment-variable)
-  - [3.3. How to run "Provision AWS Infrastructure using Terraform" pipeline](#33-how-to-run-provision-aws-infrastructure-using-terraform-pipeline)
-  - [3.4. How to run "Terraform Destroy" pipeline](#34-how-to-run-terraform-destroy-pipeline)
 
 ## 1. AWS
 
@@ -143,7 +141,7 @@ In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets a
 
 Create a new repository secret:<br>
 Name: SWAN_CI_IAM_ROLE_ARN<br>
-Secret: swan_githubactions_terraform IAM Role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
+Secret: swan_githubactions_terraform IAM role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
 
 ### 3.2. Set environment variable
 
@@ -152,14 +150,3 @@ In .github/workflows/swan_terraform.yml and .github/workflows/swan_terraform_des
 env:
   SWAN_AWS_REGION: "ap-southeast-1"
 ```
-
-### 3.3. How to run "Provision AWS Infrastructure using Terraform" pipeline
-
-"Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
-1. The CI/CD pipeline runs when a pull request is opened against the main branch.
-2. The CI/CD pipeline runs when a direct push is made to the main branch.
-3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform. Click "Run workflow", and click "Run workflow" to run the CI/CD pipeline.
-
-### 3.4. How to run "Terraform Destroy" pipeline
-
-In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy. Click "Run workflow", and click "Run workflow" to run "Terraform Destroy" pipeline.
