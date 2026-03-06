@@ -20,7 +20,7 @@ Run "Provision AWS Infrastructure using Terraform" pipeline to create EKS Infras
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
 3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform. Click "Run workflow", and click "Run workflow" to run the CI/CD pipeline.
-
+<br>
 
 Run "Terraform Destroy" pipeline to destroy EKS Infrastructure.<br>
 In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy. Click "Run workflow", and click "Run workflow" to run "Terraform Destroy" pipeline.
