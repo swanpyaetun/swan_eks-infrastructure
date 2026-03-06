@@ -89,10 +89,4 @@ resource "helm_release" "swan_karpenter_helm_release" {
       swan_karpenter_interruption_sqs_queue_name = var.swan_karpenter_interruption_sqs_queue_name
     })
   ]
-
-  lifecycle {
-    ignore_changes = [
-      metadata
-    ]
-  }
 }
