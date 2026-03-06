@@ -88,8 +88,7 @@ Tags:<br>
 
 ### 1.3. Route 53 domain and public hosted zone
 
-A domain called "swanpyaetun.com" must be present in Route 53 Registered domains. A public hosted zone called "swanpyaetun.com" must be present in Route 53 Hosted zones. 
-
+A domain called "swanpyaetun.com" must be present in Route 53 Registered domains. A public hosted zone called "swanpyaetun.com" must be present in Route 53 Hosted zones.<br>
 Both the domain and the public hosted zone have the following tags:<br>
 Project: swan_eks-infrastructure<br>
 Environment: Production
@@ -137,8 +136,7 @@ In swan_terraform/swan_environments/swan_production/prod.tfvars, set the values 
 
 ### 3.1. Create repository secret
 
-In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.
-
+In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.<br>
 Create a new repository secret:<br>
 Name: SWAN_CI_IAM_ROLE_ARN<br>
 Secret: swan_githubactions_terraform IAM role arn from [1.2. Create IAM Role for GitHub Actions to authenticate to AWS](#12-create-iam-role-for-github-actions-to-authenticate-to-aws)
