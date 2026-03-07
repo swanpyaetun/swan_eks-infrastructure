@@ -85,7 +85,7 @@ Regional NAT gateway only allows outbound traffic from private subnets to intern
 Resources in private subnets are secured by implementing the following practices:
 1. Using regional NAT gateway to disable public access from the internet
 
-High availbility in NAT gateway is achieved by implementing the following practices:
+High availability in NAT gateway is achieved by implementing the following practices:
 1. Using NAT gateway in Regional availability_mode
 
 Regional NAT Gateway with auto mode is enabled by not specifying availability_zone_address argument in aws_nat_gateway Terraform resource. Regional NAT gateway with auto mode will automatically expand to new AZs and associate EIPs upon detection of an elastic network interface. This reduces management overhead.
@@ -189,7 +189,7 @@ nodeSelector and toleration are applied to the above resources, so that they can
 ```hcl
 terraform {
   backend "s3" {
-    bucket       = "swan-production-terraform-backend"
+    bucket       = "swan-terraform-backend"
     key          = "swan_production/terraform.tfstate"
     region       = "ap-southeast-1"
     use_lockfile = true # s3 state locking
@@ -208,14 +208,14 @@ swan_public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 swan_public_subnet_tags = {
   "kubernetes.io/role/elb" = "1"
 }
-swan_private_subnet_cidr_blocks = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
+swan_private_subnet_cidr_blocks = ["10.0.16.0/20", "10.0.32.0/20", "10.0.48.0/20"]
 swan_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = "1"
   # for Karpenter auto-discovery
   "karpenter.sh/discovery" = "swan_production_eks_cluster"
 }
 ```
-To have a lot of ip addresses, /16 is used for VPC which gives 65536 ip addresses, and /18 is used for private subnets which gives 16384 ip addresses per private subnet.
+To have a lot of ip addresses, /16 is used for VPC which gives 65536 ip addresses, and /20 is used for private subnets which gives 4096 ip addresses per private subnet.
 
 Subnets are created across 3 availability zones.
 
@@ -228,7 +228,7 @@ swan_system_eks_node_group_desired_size = 2
 swan_system_eks_node_group_min_size     = 2
 swan_system_eks_node_group_max_size     = 2
 ```
-High availbility in system EKS node group is achieved by implementing the following practices:
+High availability in system EKS node group is achieved by implementing the following practices:
 1. Setting 2 nodes as minimum size, and 2 nodes as desired_size
 
 ## 3. GitHub Actions

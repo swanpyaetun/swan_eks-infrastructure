@@ -18,7 +18,7 @@ resource "aws_iam_role" "swan_external_dns_iam_role" {
 }
 
 data "aws_route53_zone" "swan_route53_public_hosted_zone" {
-  name         = "${var.swan_domain}."
+  name         = var.swan_domain_name
   private_zone = false
 }
 

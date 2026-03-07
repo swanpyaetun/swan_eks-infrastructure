@@ -46,7 +46,7 @@ variable "swan_eks_node_monitoring_agent_eks_addon_version" {
   type = string
 }
 
-variable "swan_domain" {
+variable "swan_domain_name" {
   type = string
 }
 

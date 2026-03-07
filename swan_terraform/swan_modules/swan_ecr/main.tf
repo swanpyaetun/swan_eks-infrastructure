@@ -9,6 +9,7 @@ resource "aws_ecr_repository" "swan_private_ecr_repositories" {
   }
 }
 
+# ECR Lifecycle Policy for ECR Repository
 resource "aws_ecr_lifecycle_policy" "swan_ecr_lifecycle_policies" {
   for_each   = aws_ecr_repository.swan_private_ecr_repositories
   repository = each.value.name

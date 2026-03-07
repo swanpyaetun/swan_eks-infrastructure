@@ -15,6 +15,6 @@ variable "swan_karpenter_interruption_sqs_queue_name" {
   type = string
 }
 
-variable "swan_domain" {
+variable "swan_domain_name" {
   type = string
 }

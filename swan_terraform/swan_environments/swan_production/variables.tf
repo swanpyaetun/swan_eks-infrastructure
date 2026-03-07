@@ -1,12 +1,3 @@
-# swan_ecr
-variable "swan_private_ecr_namespace" {
-  type = string
-}
-
-variable "swan_private_ecr_repository_names" {
-  type = list(string)
-}
-
 # swan_vpc
 variable "swan_vpc_cidr_block" {
   type = string
@@ -79,7 +70,7 @@ variable "swan_eks_node_monitoring_agent_eks_addon_version" {
   type = string
 }
 
-variable "swan_domain" {
+variable "swan_domain_name" {
   type = string
 }
 

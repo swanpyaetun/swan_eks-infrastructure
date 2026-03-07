@@ -55,7 +55,7 @@ resource "helm_release" "swan_external_dns_helm_release" {
   values = [
     templatefile("${path.module}/swan_helm_values/external-dns.yaml.tpl", {
       swan_eks_cluster_name = var.swan_eks_cluster_name
-      swan_domain           = var.swan_domain
+      swan_domain_name      = var.swan_domain_name
     })
   ]
 }

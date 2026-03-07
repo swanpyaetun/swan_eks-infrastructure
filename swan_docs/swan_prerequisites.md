@@ -21,7 +21,7 @@
 In AWS Management Console, create a S3 bucket in ap-southeast-1 region with the following configurations:<br>
 General configuration:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Bucket type: General purpose<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Bucket name: swan-production-terraform-backend<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Bucket name: swan-terraform-backend<br>
 Object Ownership:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Object Ownership: ACLs disabled (recommended)<br>
 Block Public Access settings for this bucket:<br>
@@ -35,7 +35,7 @@ Default encryption:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Encryption type: Server-side encryption with Amazon S3 managed keys (SSE-S3)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Bucket Key: Enable
 
-To add S3 bucket policy for "swan-production-terraform-backend" S3 bucket, in AWS Management Console, go to ap-southeast-1 region -> S3 -> Buckets -> General purpose buckets -> swan-production-terraform-backend -> Permissions -> Bucket policy. Click "Edit". Copy and paste the following json. Click "Save changes".
+To add S3 bucket policy for "swan-terraform-backend" S3 bucket, in AWS Management Console, go to ap-southeast-1 region -> S3 -> Buckets -> General purpose buckets -> swan-terraform-backend -> Permissions -> Bucket policy. Click "Edit". Copy and paste the following json. Click "Save changes".
 ```json
 {
     "Version": "2012-10-17",
@@ -46,8 +46,8 @@ To add S3 bucket policy for "swan-production-terraform-backend" S3 bucket, in AW
             "Principal": "*",
             "Action": "s3:*",
             "Resource": [
-                "arn:aws:s3:::swan-production-terraform-backend",
-                "arn:aws:s3:::swan-production-terraform-backend/*"
+                "arn:aws:s3:::swan-terraform-backend",
+                "arn:aws:s3:::swan-terraform-backend/*"
             ],
             "Condition": {
                 "Bool": {
@@ -98,13 +98,13 @@ Environment: Production
 ### 2.1. Configure Terraform remote state
 
 In swan_terraform/swan_environments/swan_production/backend.tf, set the following for "s3" backend:<br>
-[bucket: "swan-production-terraform-backend"](#11-create-s3-bucket-for-terraform-remote-state)<br>
+[bucket: "swan-terraform-backend"](#11-create-s3-bucket-for-terraform-remote-state)<br>
 key: "swan_production/terraform.tfstate"<br>
 [region: "ap-southeast-1"](#11-create-s3-bucket-for-terraform-remote-state)
 ```hcl
 terraform {
   backend "s3" {
-    bucket       = "swan-production-terraform-backend"
+    bucket       = "swan-terraform-backend"
     key          = "swan_production/terraform.tfstate"
     region       = "ap-southeast-1"
     use_lockfile = true # s3 state locking

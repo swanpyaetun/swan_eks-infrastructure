@@ -1,28 +1,3 @@
-# swan_ecr
-swan_private_ecr_namespace = "swan_polyglot-microservices-application"
-swan_private_ecr_repository_names = [
-  "accounting",
-  "ad",
-  "cart",
-  "checkout",
-  "currency",
-  "email",
-  "flagd",
-  "fraud-detection",
-  "frontend",
-  "frontend-proxy",
-  "image-provider",
-  "kafka",
-  "llm",
-  "load-generator",
-  "payment",
-  "product-catalog",
-  "product-reviews",
-  "quote",
-  "recommendation",
-  "shipping"
-]
-
 # swan_vpc
 swan_vpc_cidr_block            = "10.0.0.0/16"
 swan_availability_zones        = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
@@ -30,7 +5,7 @@ swan_public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 swan_public_subnet_tags = {
   "kubernetes.io/role/elb" = "1"
 }
-swan_private_subnet_cidr_blocks = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
+swan_private_subnet_cidr_blocks = ["10.0.16.0/20", "10.0.32.0/20", "10.0.48.0/20"]
 swan_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = "1"
   # for Karpenter auto-discovery
@@ -49,4 +24,4 @@ swan_coredns_eks_addon_version                   = "v1.13.2-eksbuild.1"
 swan_kube_proxy_eks_addon_version                = "v1.35.0-eksbuild.2"
 swan_eks_pod_identity_agent_eks_addon_version    = "v1.3.10-eksbuild.2"
 swan_eks_node_monitoring_agent_eks_addon_version = "v1.5.2-eksbuild.1"
-swan_domain                                      = "swanpyaetun.com"
+swan_domain_name                                 = "swanpyaetun.com"
