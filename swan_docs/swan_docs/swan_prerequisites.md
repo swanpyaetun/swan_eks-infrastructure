@@ -2,13 +2,13 @@
 
 ## Table of Contents
 
-- [1. Terraform Prerequisites](#1-terraform-prerequisites)
+- [1. AWS](#1-aws)
   - [1.1. Route 53 domain and public hosted zone](#11-route-53-domain-and-public-hosted-zone)
   - [1.2. Create AWS resources required for swanpyaetun/swan_eks-infrastructure Project, and swanpyaetun/swan_polyglot-microservices-application Project](#12-create-aws-resources-required-for-swanpyaetunswan_eks-infrastructure-project-and-swanpyaetunswan_polyglot-microservices-application-project)
 - [2. GitHub Actions](#2-github-actions)
   - [2.1. Create repository secret](#21-create-repository-secret)
 
-## 1. Terraform Prerequisites
+## 1. AWS
 
 ### 1.1. Route 53 domain and public hosted zone
 
@@ -52,9 +52,8 @@ Run this command.
 terraform apply -auto-approve -var-file=prerequisites.tfvars
 ```
 Run this command to create AWS resources required for swanpyaetun/swan_eks-infrastructure project, and swanpyaetun/swan_polyglot-microservices-application project.<br>
-S3 bucket, GitHub OIDC provider, and CI IAM role is created for swanpyaetun/swan_eks-infrastructure project.<br>
-CI IAM role, Private ECR Repositories, and ACM Certificate is created for swanpyaetun/swan_polyglot-microservices-application project.<br>
-The above command will generate the following Terraform outputs: swan_acm_certificate_arn, swan_githubactions_ecr_iam_role_arn, and swan_githubactions_terraform_iam_role_arn. Copy the Terraform outputs.
+S3 bucket, GitHub OIDC provider, and CI IAM role are created for swanpyaetun/swan_eks-infrastructure project.<br>
+CI IAM role, Private ECR Repositories, and ACM Certificate are created for swanpyaetun/swan_polyglot-microservices-application project.
 <br><br>
 
 ```hcl
@@ -85,10 +84,10 @@ You can clean up the directory.
 
 ### 2.1. Create repository secret
 
-You can get "swan_githubactions_terraform_iam_role" arn in 3 ways:
-1. Copied Terraform outputs from [1.2. Create AWS resources required for swanpyaetun/swan_eks-infrastructure Project, and swanpyaetun/swan_polyglot-microservices-application Project](#12-create-aws-resources-required-for-swanpyaetunswan_eks-infrastructure-project-and-swanpyaetunswan_polyglot-microservices-application-project)
-2. aws iam get-role --role-name swan_githubactions_terraform_iam_role --query 'Role.Arn' --output text
-3. AWS Management Console
+```bash
+aws iam get-role --role-name swan_githubactions_terraform_iam_role --query 'Role.Arn' --output text
+```
+Run this command to get "swan_githubactions_terraform_iam_role" arn.
 
 In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.<br>
 Create a new repository secret:<br>

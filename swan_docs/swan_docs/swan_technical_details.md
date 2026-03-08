@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [1. Terraform Prerequisites](#1-terraform-prerequisites)
+- [1. AWS](#1-aws)
   - [1.1. Route 53 domain and public hosted zone](#11-route-53-domain-and-public-hosted-zone)
   - [1.2. S3 bucket for Terraform remote state](#12-s3-bucket-for-terraform-remote-state)
   - [1.3. IAM Role for GitHub Actions to authenticate to AWS](#13-iam-role-for-github-actions-to-authenticate-to-aws)
@@ -18,7 +18,7 @@
   - [3.1. .github/workflows/swan_terraform.yml](#31-githubworkflowsswan_terraformyml)
   - [3.2. .github/workflows/swan_terraform_destroy.yml](#32-githubworkflowsswan_terraform_destroyyml)
 
-## 1. Terraform Prerequisites
+## 1. AWS
 
 ### 1.1. Route 53 domain and public hosted zone
 
@@ -32,9 +32,7 @@ S3 bucket is used as backend storage for Terraform remote state. For state recov
 
 GitHub OIDC provider is added in IAM.
 
-IAM role is configured to trust GitHub OIDC provider, swanpyaetun organization, and swan_eks-infrastructure repository. IAM role is created with AdministratorAccess.
-
-GitHub Actions can now assume IAM role.
+IAM role is configured to trust GitHub OIDC provider for swan_eks-infrastructure repository in swanpyaetun organization. IAM role is created with AdministratorAccess.
 
 GitHub Actions authentication to AWS is secured by implementing the following practices:
 1. Not storing long-lived IAM user credentials in GitHub
