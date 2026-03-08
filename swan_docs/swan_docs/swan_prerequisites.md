@@ -21,7 +21,7 @@ cd ~/Desktop/
 git clone git@github.com:swanpyaetun/swan_eks-infrastructure.git
 ```
 Go to ~/Desktop/ and clone the [https://github.com/swanpyaetun/swan_eks-infrastructure](https://github.com/swanpyaetun/swan_eks-infrastructure) repository.
-<br>
+<br><br>
 
 ```bash
 cd ~/Desktop/swan_eks-infrastructure/swan_terraform/swan_environments/swan_prerequisites/
