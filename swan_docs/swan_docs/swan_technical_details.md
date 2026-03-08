@@ -121,10 +121,12 @@ swan_eks module contains:
 21. EventBridge rules
 22. Karpenter IAM role
 23. Karpenter pod identity association
+<br>
 
 EKS control plane cross-account ENIs are deployed in private subnets. Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
 
 System EKS node group nodes are deployed in private subnets. "ON_DEMAND" capacity_type is used. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Label and taint are applied to the system EKS node group nodes, so that only system workloads can run on system EKS node group nodes.
+<br>
 
 vpc-cni EKS addon enables pod networking within EKS cluster. Prefix Delegation is enabled to increase the number of IP addresses available to nodes and increase pod density per node. With Prefix Delegation enabled, vpc-cni assigns /28 (16 IP addresses) IPv4 address prefixes, instead of assigning individual IPv4 addresses to ENIs of the nodes. vpc-cni allocates IP addresses to pods from the prefixes assigned to ENIs. vpc-cni pre-allocates a prefix for faster pod startup by maintaining a warm pool. Network policy is enabled in vpc-cni to enforce Kubernetes network policies.
 
@@ -135,10 +137,12 @@ kube-proxy EKS addon enables service networking within EKS cluster.
 eks-pod-identity-agent EKS addon is used, so that IAM roles can be associated with Kubernetes service accounts.
 
 eks-node-monitoring-agent EKS addon enables automatic detection of node health issues, so more node conditions for EKS node auto repair can be detected.
+<br>
 
 An access entry is created for CI IAM role, and AmazonEKSClusterAdminPolicy is assigned to CI IAM role.
 
-EKS cluster admin is created as an IAM role. An access entry is created for EKS cluster admin IAM role, and AmazonEKSClusterAdminPolicy is assigned to EKS cluster admin IAM role. 
+EKS cluster admin is created as an IAM role. An access entry is created for EKS cluster admin IAM role, and AmazonEKSClusterAdminPolicy is assigned to EKS cluster admin IAM role.
+<br>
 
 EKS cluster is secured by implementing the following practices:
 1. Envelope encryption is enabled in EKS cluster (Default)
@@ -147,12 +151,14 @@ EKS cluster is secured by implementing the following practices:
 4. System EKS node group nodes are deployed in private subnets
 5. vpc-cni enforcing Kubernetes network policies
 6. Creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
+<br>
 
 AmazonEC2ContainerRegistryReadOnly policy is attached to Argo CD Image Updater IAM role. Argo CD Image Updater IAM role is associated with "argocd-image-updater" service account in "argocd" namespace, using eks pod identity.
 
 AWS Load Balancer Controller IAM role is associated with "aws-load-balancer-controller" service account in "kube-system" namespace, using eks pod identity.
 
 External DNS IAM role is associated with "external-dns" service account in "kube-system" namespace, using eks pod identity.
+<br>
 
 Karpenter interruption SQS queue is secured by implementing the following practices:
 1. Encrypt data at rest by enabling SSE-SQS encryption type

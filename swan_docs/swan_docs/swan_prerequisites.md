@@ -21,11 +21,13 @@ cd ~/Desktop/
 git clone git@github.com:swanpyaetun/swan_eks-infrastructure.git
 ```
 Go to ~/Desktop/ and clone the [https://github.com/swanpyaetun/swan_eks-infrastructure](https://github.com/swanpyaetun/swan_eks-infrastructure) repository.
+<br>
 
 ```bash
 cd ~/Desktop/swan_eks-infrastructure/swan_terraform/swan_environments/swan_prerequisites/
 ```
 Go to ~/Desktop/swan_eks-infrastructure/swan_terraform/swan_environments/swan_prerequisites/ directory.
+<br>
 
 ```hcl
 # terraform {
@@ -38,11 +40,13 @@ Go to ~/Desktop/swan_eks-infrastructure/swan_terraform/swan_environments/swan_pr
 # }
 ```
 Comment out backend.tf file, since S3 bucket has not been created yet.
+<br>
 
 ```bash
 terraform init
 ```
 Run this command.
+<br>
 
 ```bash
 terraform apply -auto-approve -var-file=prerequisites.tfvars
@@ -51,6 +55,7 @@ Run this command to create AWS resources required for swanpyaetun/swan_eks-infra
 S3 bucket, GitHub OIDC provider, and CI IAM role is created for swanpyaetun/swan_eks-infrastructure project.<br>
 CI IAM role, Private ECR Repositories, and ACM Certificate is created for swanpyaetun/swan_polyglot-microservices-application project.<br>
 The above command will generate the following Terraform outputs: swan_acm_certificate_arn, swan_githubactions_ecr_iam_role_arn, and swan_githubactions_terraform_iam_role_arn. Copy the Terraform outputs.
+<br>
 
 ```hcl
 terraform {
@@ -63,11 +68,13 @@ terraform {
 }
 ```
 Uncomment backend.tf file, since S3 bucket has already been created.
+<br>
 
 ```bash
 terraform init -migrate-state
 ```
 Run this command to migrate "local" backend to "s3" backend. Enter "yes".
+<br>
 
 ```bash
 rm -rf .terraform/ .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
