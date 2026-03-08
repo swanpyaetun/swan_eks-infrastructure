@@ -9,9 +9,9 @@
 - [3. Instructions](#3-instructions)
 - [4. Additional Information](#4-additional-information)
 
-## 1. See [Prerequisites](swan_docs/swan_prerequisites.md)
+## 1. See [Prerequisites](swan_docs/swan_docs//swan_prerequisites.md)
 
-## 2. See [Technical Details](swan_docs/swan_technical_details.md)
+## 2. See [Technical Details](swan_docs/swan_docs/swan_technical_details.md)
 
 ## 3. Instructions
 
@@ -19,11 +19,12 @@ Run "Provision AWS Infrastructure using Terraform" pipeline to create EKS Infras
 "Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
-3. In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Provision AWS Infrastructure using Terraform. Click "Run workflow", and click "Run workflow" to run the CI/CD pipeline.
+3. The CI/CD pipeline runs when a user manually triggers it.
 <br>
 
 Run "Terraform Destroy" pipeline to destroy EKS Infrastructure.<br>
-In swanpyaetun/swan_eks-infrastructure repository, go to "Actions" -> Terraform Destroy. Click "Run workflow", and click "Run workflow" to run "Terraform Destroy" pipeline.
+"Terraform Destroy" pipeline can be triggered in 1 way:
+1. The CI/CD pipeline runs when a user manually triggers it.
 
 ## 4. Additional Information
 

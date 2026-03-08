@@ -2,54 +2,47 @@
 
 ## Table of Contents
 
-- [1. AWS](#1-aws)
-  - [1.1. S3 bucket for Terraform remote state](#11-s3-bucket-for-terraform-remote-state)
-  - [1.2. IAM Role for GitHub Actions to authenticate to AWS](#12-iam-role-for-github-actions-to-authenticate-to-aws)
-  - [1.3. Route 53 domain and public hosted zone](#13-route-53-domain-and-public-hosted-zone)
+- [1. Terraform Prerequisites](#1-terraform-prerequisites)
+  - [1.1. Route 53 domain and public hosted zone](#11-route-53-domain-and-public-hosted-zone)
+  - [1.2. S3 bucket for Terraform remote state](#12-s3-bucket-for-terraform-remote-state)
+  - [1.3. IAM Role for GitHub Actions to authenticate to AWS](#13-iam-role-for-github-actions-to-authenticate-to-aws)
 - [2. Terraform](#2-terraform)
   - [2.1. swan_terraform/swan_modules/swan_ecr](#21-swan_terraformswan_modulesswan_ecr)
-  - [2.2. swan_terraform/swan_modules/swan_vpc](#22-swan_terraformswan_modulesswan_vpc)
-  - [2.3. swan_terraform/swan_modules/swan_eks](#23-swan_terraformswan_modulesswan_eks)
-  - [2.4. swan_terraform/swan_modules/swan_helm](#24-swan_terraformswan_modulesswan_helm)
-  - [2.5. swan_terraform/swan_environments/swan_production/backend.tf](#25-swan_terraformswan_environmentsswan_productionbackendtf)
-  - [2.6. swan_terraform/swan_environments/swan_production/prod.tfvars](#26-swan_terraformswan_environmentsswan_productionprodtfvars)
+  - [2.2. swan_terraform/swan_modules/swan_acm](#22-swan_terraformswan_modulesswan_acm)
+  - [2.3. swan_terraform/swan_modules/swan_s3](#23-swan_terraformswan_modulesswan_s3)
+  - [2.4. swan_terraform/swan_modules/swan_vpc](#24-swan_terraformswan_modulesswan_vpc)
+  - [2.5. swan_terraform/swan_modules/swan_eks](#25-swan_terraformswan_modulesswan_eks)
+  - [2.6. swan_terraform/swan_modules/swan_helm](#26-swan_terraformswan_modulesswan_helm)
+  - [2.7. swan_terraform/swan_environments/swan_production/prod.tfvars](#27-swan_terraformswan_environmentsswan_productionprodtfvars)
 - [3. GitHub Actions](#3-github-actions)
   - [3.1. .github/workflows/swan_terraform.yml](#31-githubworkflowsswan_terraformyml)
   - [3.2. .github/workflows/swan_terraform_destroy.yml](#32-githubworkflowsswan_terraform_destroyyml)
 
-## 1. AWS
+## 1. Terraform Prerequisites
 
-### 1.1. S3 bucket for Terraform remote state
+### 1.1. Route 53 domain and public hosted zone
 
-S3 bucket is used as backend storage for Terraform remote state.
+The public hosted zone is used, so that the domain can be accessible from the internet.
 
-Bucket Versioning is enabled for state recovery in the case of accidental deletions and human error.
+### 1.2. S3 bucket for Terraform remote state
 
-S3 bucket is secured by implementing the following practices:
-1. Block all public access
-2. Enable Bucket Versioning
-3. Enable SSE-S3 encryption type (Default encryption)
-4. Deny insecure http traffic with S3 bucket policy
+S3 bucket is used as backend storage for Terraform remote state. For state recovery, Bucket Versioning is enabled.
 
-### 1.2. IAM Role for GitHub Actions to authenticate to AWS
+### 1.3. IAM Role for GitHub Actions to authenticate to AWS
 
-GitHub OIDC provider is added in IAM. 
+GitHub OIDC provider is added in IAM.
 
-IAM role is configured to trust GitHub OIDC provider, swanpyaetun organization, and swan_eks-infrastructure repository. IAM role is created with AdministratorAccess. 
+IAM role is configured to trust GitHub OIDC provider, swanpyaetun organization, and swan_eks-infrastructure repository. IAM role is created with AdministratorAccess.
 
-GitHub Actions can now assume IAM role. 
+GitHub Actions can now assume IAM role.
 
 GitHub Actions authentication to AWS is secured by implementing the following practices:
 1. Not storing long-lived IAM user credentials in GitHub
 2. Using short-lived OIDC tokens with automatic expiration
 
-### 1.3. Route 53 domain and public hosted zone
-
-The public hosted zone is used, so that the domain can be accessible from the internet.
-
 ## 2. Terraform
 
-Related resources are packaged into individual Terraform modules, so that the same infrasturcture can be created easier and faster, and configurations can be standardized across environments and teams.
+Related AWS resources are packaged into individual Terraform modules, so that the same infrasturcture can be created easier and faster, and configurations can be standardized across environments and teams.
 
 ### 2.1. swan_terraform/swan_modules/swan_ecr
 
@@ -68,7 +61,19 @@ ECR basic scanning is a free service. It only scans for OS vulnerabilities, not 
 
 To view ECR basic scanning results, in AWS Management Console, go to ap-southeast-1 region -> Elastic Container Registry -> Private registry -> Repositories. Choose a repository that has container image that you want to view ECR basic scanning result for. Choose an image that you want to view ECR basic scanning result for. Under "Scanning and vulnerabilities", you will see ECR basic scanning result for that image.
 
-### 2.2. swan_terraform/swan_modules/swan_vpc
+### 2.2. swan_terraform/swan_modules/swan_acm
+
+swan_acm module creates an ACM certificate, and a record in Route 53 public hosted zone to validate the domain.
+
+### 2.3. swan_terraform/swan_modules/swan_s3
+
+S3 bucket is secured by implementing the following practices:
+1. Block all public access
+2. Enable Bucket Versioning
+3. Enable SSE-S3 encryption type (Default encryption)
+4. Deny insecure http traffic with S3 bucket policy
+
+### 2.4. swan_terraform/swan_modules/swan_vpc
 
 swan_vpc module contains:
 1. VPC
@@ -90,7 +95,7 @@ High availability in NAT gateway is achieved by implementing the following pract
 
 Regional NAT Gateway with auto mode is enabled by not specifying availability_zone_address argument in aws_nat_gateway Terraform resource. Regional NAT gateway with auto mode will automatically expand to new AZs and associate EIPs upon detection of an elastic network interface. This reduces management overhead.
 
-### 2.3. swan_terraform/swan_modules/swan_eks
+### 2.5. swan_terraform/swan_modules/swan_eks
 
 swan_eks module contains:
 1. EKS cluster IAM role
@@ -160,7 +165,7 @@ EventBridge sends "AWS Health Event", "EC2 Spot Instance Interruption Warning", 
 
 Karpenter IAM role is associated with "karpenter" service account in "kube-system" namespace, using eks pod identity.
 
-### 2.4. swan_terraform/swan_modules/swan_helm
+### 2.6. swan_terraform/swan_modules/swan_helm
 
 swan_helm module contains:
 1. Argo CD
@@ -184,21 +189,7 @@ Karpenter is a cluster autoscaler that automatically provisions and scales nodes
 
 nodeSelector and toleration are applied to the above resources, so that they can run on system EKS node group nodes.
 
-### 2.5. swan_terraform/swan_environments/swan_production/backend.tf
-
-```hcl
-terraform {
-  backend "s3" {
-    bucket       = "swan-terraform-backend"
-    key          = "swan_production/terraform.tfstate"
-    region       = "ap-southeast-1"
-    use_lockfile = true # s3 state locking
-  }
-}
-```
-S3 state locking is enabled for Terraform S3 backend.
-
-### 2.6. swan_terraform/swan_environments/swan_production/prod.tfvars
+### 2.7. swan_terraform/swan_environments/swan_production/prod.tfvars
 
 ```hcl
 # swan_vpc
@@ -217,19 +208,9 @@ swan_private_subnet_tags = {
 ```
 To have a lot of ip addresses, /16 is used for VPC which gives 65536 ip addresses, and /20 is used for private subnets which gives 4096 ip addresses per private subnet.
 
-Subnets are created across 3 availability zones.
-
 The public subnets tag "kubernetes.io/role/elb" signals AWS Load Balancer Controller in EKS cluster that these public subnets are for internet-facing load balancers.
 
-The private subnets tag "kubernetes.io/role/internal-elb" signals AWS Load Balancer Controller in EKS cluster that these private subnets are for internal load balancers. The private subnets tag "karpenter.sh/discovery" is for Karpenter auto-discovery, so Karpenter can launch EC2 nodes in these private subnets for swan_production_eks_cluster.
-
-```hcl
-swan_system_eks_node_group_desired_size = 2
-swan_system_eks_node_group_min_size     = 2
-swan_system_eks_node_group_max_size     = 2
-```
-High availability in system EKS node group is achieved by implementing the following practices:
-1. Setting 2 nodes as minimum size, and 2 nodes as desired_size
+The private subnets tag "kubernetes.io/role/internal-elb" signals AWS Load Balancer Controller in EKS cluster that these private subnets are for internal load balancers. The private subnets tag "karpenter.sh/discovery" is for Karpenter auto-discovery, so Karpenter can launch nodes in these private subnets for swan_production_eks_cluster.
 
 ## 3. GitHub Actions
 
@@ -262,7 +243,8 @@ Terraform plan file is used so that only reviewed resources during plan stage ar
 
 ### 3.2. .github/workflows/swan_terraform_destroy.yml
 
-"Terraform Destroy" pipeline runs when a user manually triggers it.
+"Terraform Destroy" pipeline can be triggered in 1 way:
+1. The CI/CD pipeline runs when a user manually triggers it.
 
 swan_terraform_destroy job does the following steps:
 1. checkout repository
