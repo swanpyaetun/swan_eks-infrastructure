@@ -2,6 +2,8 @@
 
 # Automating EKS Infrastructure Provisioning with Terraform and GitHub Actions
 
+![](swan_docs/swan_images/architecture_diagram.png)
+
 - Tools used: GitHub Actions, Terraform, AWS, EKS, Helm, Argo CD, Argo CD Image Updater, AWS Load Balancer Controller, External DNS, Karpenter
 - Provision EKS infrastructure with Terraform
 - Set up GitHub Actions CI/CD pipelines to automate infrastructure provisioning
