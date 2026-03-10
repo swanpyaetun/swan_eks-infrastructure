@@ -13,6 +13,7 @@ resource "aws_acm_certificate" "swan_acm_certificate" {
   }
 }
 
+# Route 53 record to validate the domain
 data "aws_route53_zone" "swan_route53_public_hosted_zone" {
   name         = var.swan_domain_name
   private_zone = false

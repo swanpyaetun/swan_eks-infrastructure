@@ -53,7 +53,7 @@ terraform apply -auto-approve -var-file=prerequisites.tfvars
 ```
 Run this command to create AWS resources required for swanpyaetun/swan_eks-infrastructure project, and swanpyaetun/swan_polyglot-microservices-application project.<br>
 S3 bucket, GitHub OIDC provider, and CI IAM role are created for swanpyaetun/swan_eks-infrastructure project.<br>
-CI IAM role, Private ECR Repositories, and ACM Certificate are created for swanpyaetun/swan_polyglot-microservices-application project.
+CI IAM role, private ECR repositories, and ACM certificate are created for swanpyaetun/swan_polyglot-microservices-application project.
 <br><br>
 
 ```hcl

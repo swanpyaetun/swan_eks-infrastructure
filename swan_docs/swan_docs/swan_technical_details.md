@@ -22,11 +22,11 @@
 
 ### 1.1. Route 53 domain and public hosted zone
 
-The public hosted zone is used, so that the domain can be accessible from the internet.
+Route 53 public hosted zone is used, so that Route 53 domain can be accessible from the internet.
 
 ### 1.2. S3 bucket for Terraform remote state
 
-S3 bucket is used as backend storage for Terraform remote state. For state recovery, Bucket Versioning is enabled.
+S3 bucket is used to store Terraform remote state.
 
 ### 1.3. IAM Role for GitHub Actions to authenticate to AWS
 
@@ -61,9 +61,18 @@ To view ECR basic scanning results, in AWS Management Console, go to ap-southeas
 
 ### 2.2. swan_terraform/swan_modules/swan_acm
 
-swan_acm module creates an ACM certificate, and a record in Route 53 public hosted zone to validate the domain.
+swan_acm module contains:
+1. ACM certificate
+2. Route 53 record to validate the domain
 
 ### 2.3. swan_terraform/swan_modules/swan_s3
+
+swan_s3 module contains:
+1. S3 bucket
+2. Block all public access in S3 bucket
+3. Enable Bucket Versioning in S3 bucket
+4. Enable SSE-S3 encryption type (Default encryption) in S3 bucket
+5. S3 bucket policy
 
 S3 bucket is secured by implementing the following practices:
 1. Block all public access
@@ -83,10 +92,10 @@ swan_vpc module contains:
 7. private route tables
 
 Internet gateway allows both inbound and outbound traffic between internet and public subnets.
-Regional NAT gateway only allows outbound traffic from private subnets to internet.
+NAT gateway only allows outbound traffic from private subnets to internet.
 
 Resources in private subnets are secured by implementing the following practices:
-1. Using regional NAT gateway to disable public access from the internet
+1. Using NAT gateway to disable public access from the internet
 
 High availability in NAT gateway is achieved by implementing the following practices:
 1. Using NAT gateway in Regional availability_mode
@@ -121,20 +130,20 @@ swan_eks module contains:
 23. Karpenter pod identity association
 <br>
 
-EKS control plane cross-account ENIs are deployed in private subnets. Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
+EKS control plane cross-account ENIs are deployed in private subnets. Public endpoint is enabled for EKS cluster. Private endpoint is enabled for EKS cluster. "API" authentication_mode is used, so that access entries can be used in the cluster. Automatically giving cluster admin permissions to the cluster creator is disabled.
 
-System EKS node group nodes are deployed in private subnets. "ON_DEMAND" capacity_type is used. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled, maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Label and taint are applied to the system EKS node group nodes, so that only system workloads can run on system EKS node group nodes.
+System EKS node group nodes are deployed in private subnets. "ON_DEMAND" capacity_type is used. During update, maximum 1 node can be unavailable, and node is created first before deletion. Node auto repair is enabled. Maximum 1 node can be repaired in parallel, and node auto repair actions stop if more than 5 nodes are unhealthy. Label and taint are applied to the system EKS node group nodes, so that only system workloads can run on system EKS node group nodes.
 <br><br>
 
 vpc-cni EKS addon enables pod networking within EKS cluster. Prefix Delegation is enabled to increase the number of IP addresses available to nodes and increase pod density per node. With Prefix Delegation enabled, vpc-cni assigns /28 (16 IP addresses) IPv4 address prefixes, instead of assigning individual IPv4 addresses to ENIs of the nodes. vpc-cni allocates IP addresses to pods from the prefixes assigned to ENIs. vpc-cni pre-allocates a prefix for faster pod startup by maintaining a warm pool. Network policy is enabled in vpc-cni to enforce Kubernetes network policies.
 
-coredns EKS addon enables service discovery within EKS cluster.
+coredns EKS addon enables service discovery within EKS cluster. nodeSelector and toleration are applied to coredns pods, so that they can run on system EKS node group nodes.
 
 kube-proxy EKS addon enables service networking within EKS cluster.
 
 eks-pod-identity-agent EKS addon is used, so that IAM roles can be associated with Kubernetes service accounts.
 
-eks-node-monitoring-agent EKS addon enables automatic detection of node health issues, so more node conditions for EKS node auto repair can be detected.
+eks-node-monitoring-agent EKS addon enables automatic detection of node health issues, so that more node conditions for EKS node auto repair can be detected.
 <br><br>
 
 An access entry is created for CI IAM role, and AmazonEKSClusterAdminPolicy is assigned to CI IAM role.
@@ -144,7 +153,7 @@ EKS cluster admin is created as an IAM role. An access entry is created for EKS 
 
 EKS cluster is secured by implementing the following practices:
 1. Envelope encryption is enabled in EKS cluster (Default)
-2. Enable private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC.
+2. Enable private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC
 3. Automatically giving cluster admin permissions to the cluster creator is disabled
 4. System EKS node group nodes are deployed in private subnets
 5. vpc-cni enforcing Kubernetes network policies
@@ -165,7 +174,7 @@ Karpenter interruption SQS queue is secured by implementing the following practi
 
 SQS queue policy ensures only EventBridge and SQS services can send messages to SQS queue.
 
-EventBridge sends "AWS Health Event", "EC2 Spot Instance Interruption Warning", "EC2 Instance Rebalance Recommendation", and "EC2 Instance State-change Notification" events to the SQS queue. Karpenter reads the events from SQS queue. When Karpenter receives interruption events, it gracefully drains the affected node and provisions a replacement so workloads can be rescheduled.
+EventBridge sends "AWS Health Event", "EC2 Spot Instance Interruption Warning", "EC2 Instance Rebalance Recommendation", and "EC2 Instance State-change Notification" events to the SQS queue. Karpenter reads the events from SQS queue. When Karpenter receives interruption events, it gracefully drains the affected node and provisions a replacement so that workloads can be rescheduled.
 
 Karpenter IAM role is associated with "karpenter" service account in "kube-system" namespace, using eks pod identity.
 
@@ -185,7 +194,7 @@ Argo CD Image Updater monitors ECR for new container image tags, updates the con
 
 AWS Load Balancer Controller watches Kubernetes ingress and service objects and creates or updates corresponding AWS load balancers (such as application load balancers and network load balancers).
 
-ExternalDNS automatically synchronizes Kubernetes ingress and service hostnames with Route 53, creating, updating, and removing DNS records so they always reflect the current cluster state.
+ExternalDNS automatically synchronizes Kubernetes ingress and service hostnames with Route 53, creating, updating, and removing DNS records so that they always reflect the current cluster state.
 
 Metrics Server provides resource usage data (CPU, memory) for nodes and pods, for monitoring and auto-scaling workloads.
 
@@ -214,13 +223,13 @@ To have a lot of ip addresses, /16 is used for VPC which gives 65536 ip addresse
 
 The public subnets tag "kubernetes.io/role/elb" signals AWS Load Balancer Controller in EKS cluster that these public subnets are for internet-facing load balancers.
 
-The private subnets tag "kubernetes.io/role/internal-elb" signals AWS Load Balancer Controller in EKS cluster that these private subnets are for internal load balancers. The private subnets tag "karpenter.sh/discovery" is for Karpenter auto-discovery, so Karpenter can launch nodes in these private subnets for swan_production_eks_cluster.
+The private subnets tag "kubernetes.io/role/internal-elb" signals AWS Load Balancer Controller in EKS cluster that these private subnets are for internal load balancers. The private subnets tag "karpenter.sh/discovery" is for Karpenter auto-discovery, so that Karpenter can launch nodes in these private subnets for swan_production_eks_cluster.
 
 ## 3. GitHub Actions
 
 ### 3.1. .github/workflows/swan_terraform.yml
 
-"Provision AWS Infrastructure using Terraform" pipeline can be triggered in 3 ways:
+"Provision AWS Infrastructure with Terraform" pipeline can be triggered in 3 ways:
 1. The CI/CD pipeline runs when a pull request is opened against the main branch.
 2. The CI/CD pipeline runs when a direct push is made to the main branch.
 3. The CI/CD pipeline runs when a user manually triggers it.
