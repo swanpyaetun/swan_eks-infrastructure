@@ -32,7 +32,7 @@
 - Enable both public endpoint and private endpoint for EKS cluster
 - Use "API" authentication mode, so that access entries can be used in EKS cluster
 - Disable automatically giving cluster admin permissions to the EKS cluster creator
-- Secure EKS cluster by enabling evelope encryption in EKS cluster (Default), enabling private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC, and creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
+- Secure EKS cluster by enabling envelope encryption in EKS cluster (Default), enabling private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC, and creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
 - Deploy system EKS node group nodes in private subnets
 - Use "ON_DEMAND" capacity type for system EKS node group nodes, so that system EKS node group nodes are reliable
 - Enable node auto repair for system EKS node group
