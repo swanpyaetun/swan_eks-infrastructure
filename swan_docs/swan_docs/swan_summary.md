@@ -1,0 +1,15 @@
+- Tools used: GitHub Actions, Terraform, AWS, EKS, Helm, Argo CD, Argo CD Image Updater, AWS Load Balancer Controller, External DNS, Karpenter
+- Provision EKS infrastructure with Terraform
+- Set up GitHub Actions CI/CD pipelines to automate infrastructure provisioning
+- Secure GitHub Actions authentication to AWS by using short-lived OIDC tokens with automatic expiration, instead of storing long-lived IAM user credentials in GitHub
+- Secure container images in private ECR repositories by enabling AES256 encryption type (Default encryption), and ECR basic scanning on every container image push to scan for OS vulnerabilities
+- Secure S3 bucket by blocking all public access, enabling Bucket Versioning, enabling SSE-S3 encryption type (Default encryption), and denying insecure http traffic with S3 bucket policy
+- Use regional NAT gateway to be highly available across AZs
+- Secure EKS cluster by enabling envelope encryption in EKS cluster (Default), enabling private endpoint for EKS api server, so that worker node traffic to EKS api server endpoint will stay within VPC, and creating EKS cluster admin as an IAM role that have short-term credentials, rather than an IAM user that have long-term credentials
+- Enable Prefix Delegation in vpc-cni to increase the number of IP addresses available to nodes and increase pod density per node
+- Pre-allocate a prefix in vpc-cni for faster pod startup by maintaining a warm pool
+- Enable network policy in vpc-cni to enforce Kubernetes network policies
+- Secure Karpenter interruption SQS queue by encrypting data at rest by enabling SSE-SQS encryption type, encrypting data in transit (Default), and denying insecure http traffic with SQS queue policy
+- Monitor ECR for new container image tags, and update the container image tags in the git repository with Argo CD Image Updater
+- Create internet-facing ALB for Kubernetes ingress with AWS Load Balancer Controller
+- Create DNS records in Route 53 public hosted zone with External DNS
