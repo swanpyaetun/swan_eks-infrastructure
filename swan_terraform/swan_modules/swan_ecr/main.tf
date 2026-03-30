@@ -1,8 +1,8 @@
 # Private ECR Repositories
 resource "aws_ecr_repository" "swan_private_ecr_repositories" {
-  for_each     = toset(var.swan_private_ecr_repository_names)
-  name         = "${var.swan_private_ecr_namespace}/${each.value}"
-  force_delete = true
+  for_each             = toset(var.swan_private_ecr_repository_names)
+  name                 = "${var.swan_private_ecr_namespace}/${each.value}"
+  image_tag_mutability = "IMMUTABLE"
 
   encryption_configuration {
     encryption_type = "AES256"

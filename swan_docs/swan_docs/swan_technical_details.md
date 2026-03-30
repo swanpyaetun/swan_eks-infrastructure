@@ -49,6 +49,8 @@ swan_ecr module contains:
 2. ECR lifecycle policy for each private ECR repository, which only keeps latest 30 container images
 3. ECR basic scanning for private ECR repositories
 
+The image_tag_mutability for private ECR repositories is set to IMMUTABLE, so that image tags are immutable.
+
 Container images in private ECR repositories are secured by implementing the following practices:
 1. Using private ECR repositories
 2. Enable AES256 encryption_type (Default encryption) for private ECR repositories

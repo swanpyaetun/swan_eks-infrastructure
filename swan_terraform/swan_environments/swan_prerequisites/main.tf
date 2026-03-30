@@ -1,7 +1,3 @@
-################################################################################
-# Prerequisites for swanpyaetun/swan_eks-infrastructure Project
-################################################################################
-
 # GitHub OIDC provider
 resource "aws_iam_openid_connect_provider" "swan_github_oidc_provider" {
   url = "https://token.actions.githubusercontent.com"
@@ -9,6 +5,16 @@ resource "aws_iam_openid_connect_provider" "swan_github_oidc_provider" {
   client_id_list = [
     "sts.amazonaws.com"
   ]
+}
+
+################################################################################
+# Prerequisites for swanpyaetun/swan_eks-infrastructure Project
+################################################################################
+
+# S3 Bucket
+module "swan_s3" {
+  source              = "../../swan_modules/swan_s3"
+  swan_s3_bucket_name = var.swan_s3_bucket_name
 }
 
 # CI IAM Role for swanpyaetun/swan_eks-infrastructure Project
@@ -40,12 +46,6 @@ resource "aws_iam_role" "swan_githubactions_terraform_iam_role" {
 resource "aws_iam_role_policy_attachment" "swan_githubactions_terraform_iam_role_policy_attachment" {
   role       = aws_iam_role.swan_githubactions_terraform_iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-# S3 Bucket
-module "swan_s3" {
-  source              = "../../swan_modules/swan_s3"
-  swan_s3_bucket_name = var.swan_s3_bucket_name
 }
 
 ################################################################################
