@@ -113,10 +113,10 @@ resource "aws_iam_role_policy" "swan_githubactions_ecr_iam_role_policy" {
           "ecr:PutImage",
           "ecr:UploadLayerPart"
         ]
-        Resource = "arn:aws:ecr:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:repository/${var.swan_private_ecr_namespace}/*"
+        Resource = "arn:aws:ecr:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:repository/${var.swan_private_ecr_namespace}/*"
         Resource = [
           for repo in var.swan_private_ecr_repository_names :
-          "arn:aws:ecr:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:repository/${var.swan_private_ecr_namespace}/${repo}"
+          "arn:aws:ecr:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:repository/${var.swan_private_ecr_namespace}/${repo}"
         ]
       }
     ]

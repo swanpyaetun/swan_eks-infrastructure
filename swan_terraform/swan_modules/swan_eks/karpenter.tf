@@ -114,7 +114,7 @@ resource "aws_iam_role_policy" "swan_karpenter_node_lifecycle_iam_role_policy" {
   name = "${var.swan_eks_cluster_name}-swan_karpenter_node_lifecycle_iam_role_policy"
   role = aws_iam_role.swan_karpenter_iam_role.name
   policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_node_lifecycle_iam_role_policy.json.tpl", {
-    swan_aws_region       = data.aws_region.current.id
+    swan_aws_region       = data.aws_region.current.region
     swan_eks_cluster_name = var.swan_eks_cluster_name
   })
 }
@@ -124,7 +124,7 @@ resource "aws_iam_role_policy" "swan_karpenter_iam_integration_iam_role_policy" 
   role = aws_iam_role.swan_karpenter_iam_role.name
   policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_iam_integration_iam_role_policy.json.tpl", {
     swan_aws_account_id        = data.aws_caller_identity.current.account_id
-    swan_aws_region            = data.aws_region.current.id
+    swan_aws_region            = data.aws_region.current.region
     swan_eks_node_iam_role_arn = aws_iam_role.swan_eks_node_iam_role.arn
     swan_eks_cluster_name      = var.swan_eks_cluster_name
   })
@@ -135,7 +135,7 @@ resource "aws_iam_role_policy" "swan_karpenter_eks_integration_iam_role_policy" 
   role = aws_iam_role.swan_karpenter_iam_role.name
   policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_eks_integration_iam_role_policy.json.tpl", {
     swan_aws_account_id   = data.aws_caller_identity.current.account_id
-    swan_aws_region       = data.aws_region.current.id
+    swan_aws_region       = data.aws_region.current.region
     swan_eks_cluster_name = var.swan_eks_cluster_name
   })
 }
@@ -153,7 +153,7 @@ resource "aws_iam_role_policy" "swan_karpenter_resource_discovery_iam_role_polic
   role = aws_iam_role.swan_karpenter_iam_role.name
   policy = templatefile("${path.module}/swan_iam_role_policies/swan_karpenter_resource_discovery_iam_role_policy.json.tpl", {
     swan_aws_account_id = data.aws_caller_identity.current.account_id
-    swan_aws_region     = data.aws_region.current.id
+    swan_aws_region     = data.aws_region.current.region
   })
 }
 

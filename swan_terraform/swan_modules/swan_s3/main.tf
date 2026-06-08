@@ -4,7 +4,7 @@ data "aws_region" "current" {}
 
 # S3 Bucket
 resource "aws_s3_bucket" "swan_s3_bucket" {
-  bucket           = format("${var.swan_s3_bucket_name}-%s-%s-an", data.aws_caller_identity.current.account_id, data.aws_region.current.id)
+  bucket           = format("${var.swan_s3_bucket_name}-%s-%s-an", data.aws_caller_identity.current.account_id, data.aws_region.current.region)
   bucket_namespace = "account-regional"
 }
 
