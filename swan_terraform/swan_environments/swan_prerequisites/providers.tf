@@ -3,7 +3,7 @@ provider "aws" {
   default_tags {
     tags = {
       ManagedBy   = "Terraform"
-      Project     = "swan_eks-infrastructure"
+      Project     = "swan_eks-infrastructure-for-opentelemetry-demo"
       Environment = "Production"
     }
   }

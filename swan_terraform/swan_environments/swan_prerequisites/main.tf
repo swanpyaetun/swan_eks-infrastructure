@@ -7,9 +7,9 @@ resource "aws_iam_openid_connect_provider" "swan_github_oidc_provider" {
   ]
 }
 
-################################################################
-# Prerequisites for swanpyaetun/swan_eks-infrastructure Project
-################################################################
+#######################################################################################
+# Prerequisites for swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo Project
+#######################################################################################
 
 # S3 Bucket
 module "swan_s3" {
@@ -17,7 +17,7 @@ module "swan_s3" {
   swan_s3_bucket_name = var.swan_s3_bucket_name
 }
 
-# CI IAM Role for swanpyaetun/swan_eks-infrastructure Project
+# CI IAM Role for swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo Project
 resource "aws_iam_role" "swan_githubactions_terraform_iam_role" {
   name = "swan_githubactions_terraform_iam_role"
 
@@ -35,7 +35,7 @@ resource "aws_iam_role" "swan_githubactions_terraform_iam_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:swanpyaetun/swan_eks-infrastructure:*"
+            "token.actions.githubusercontent.com:sub" = "repo:swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo:*"
           }
         }
       }
@@ -48,11 +48,11 @@ resource "aws_iam_role_policy_attachment" "swan_githubactions_terraform_iam_role
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-################################################################################
-# Prerequisites for swanpyaetun/swan_polyglot-microservices-application Project
-################################################################################
+################################################################
+# Prerequisites for swanpyaetun/swan_opentelemetry-demo Project
+################################################################
 
-# CI IAM Role for swanpyaetun/swan_polyglot-microservices-application Project
+# CI IAM Role for swanpyaetun/swan_opentelemetry-demo Project
 resource "aws_iam_role" "swan_githubactions_ecr_iam_role" {
   name = "swan_githubactions_ecr_iam_role"
 
@@ -70,7 +70,7 @@ resource "aws_iam_role" "swan_githubactions_ecr_iam_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:swanpyaetun/swan_polyglot-microservices-application:*"
+            "token.actions.githubusercontent.com:sub" = "repo:swanpyaetun/swan_opentelemetry-demo:*"
           }
         }
       }
@@ -78,7 +78,7 @@ resource "aws_iam_role" "swan_githubactions_ecr_iam_role" {
   })
 
   tags = {
-    Project = "swan_polyglot-microservices-application"
+    Project = "swan_opentelemetry-demo"
   }
 }
 

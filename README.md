@@ -1,4 +1,4 @@
-# swanpyaetun/swan_eks-infrastructure
+# swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo
 
 # Automating EKS Infrastructure Provisioning with Terraform and GitHub Actions
 
@@ -80,4 +80,4 @@ Run "Terraform Destroy" pipeline to destroy EKS Infrastructure.<br>
 
 ## 4. Additional Information
 
-GitHub Actions CI/CD pipelines for microservices, and Kubernetes manifests: [https://github.com/swanpyaetun/swan_polyglot-microservices-application](https://github.com/swanpyaetun/swan_polyglot-microservices-application)
+GitHub Actions CI/CD pipelines for microservices, and Kubernetes manifests: [https://github.com/swanpyaetun/swan_opentelemetry-demo](https://github.com/swanpyaetun/swan_opentelemetry-demo)

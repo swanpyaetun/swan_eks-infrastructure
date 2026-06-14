@@ -32,7 +32,7 @@ S3 bucket is used to store Terraform remote state.
 
 GitHub OIDC provider is added in IAM.
 
-IAM role is configured to trust GitHub OIDC provider for swan_eks-infrastructure repository in swanpyaetun organization. IAM role is created with AdministratorAccess.
+IAM role is configured to trust GitHub OIDC provider for swan_eks-infrastructure-for-opentelemetry-demo repository in swanpyaetun organization. IAM role is created with AdministratorAccess.
 
 GitHub Actions authentication to AWS is secured by implementing the following practices:
 1. Not storing long-lived IAM user credentials in GitHub

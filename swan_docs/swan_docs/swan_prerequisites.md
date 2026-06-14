@@ -4,7 +4,7 @@
 
 - [1. AWS](#1-aws)
   - [1.1. Route 53 domain and public hosted zone](#11-route-53-domain-and-public-hosted-zone)
-  - [1.2. Create AWS resources required for swanpyaetun/swan_eks-infrastructure Project, and swanpyaetun/swan_polyglot-microservices-application Project](#12-create-aws-resources-required-for-swanpyaetunswan_eks-infrastructure-project-and-swanpyaetunswan_polyglot-microservices-application-project)
+  - [1.2. Create AWS resources required for swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo Project, and swanpyaetun/swan_opentelemetry-demo Project](#12-create-aws-resources-required-for-swanpyaetunswan_eks-infrastructure-for-opentelemetry-demo-project-and-swanpyaetunswan_opentelemetry-demo-project)
 - [2. GitHub Actions](#2-github-actions)
   - [2.1. Create repository secret](#21-create-repository-secret)
 
@@ -14,19 +14,19 @@
 
 A domain called "swanpyaetun.com" must be present in Route 53 Registered domains. A public hosted zone called "swanpyaetun.com" must be present in Route 53 Hosted zones.
 
-### 1.2. Create AWS resources required for swanpyaetun/swan_eks-infrastructure Project, and swanpyaetun/swan_polyglot-microservices-application Project
+### 1.2. Create AWS resources required for swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo Project, and swanpyaetun/swan_opentelemetry-demo Project
 
 ```bash
 cd ~/Desktop/
-git clone git@github.com:swanpyaetun/swan_eks-infrastructure.git
+git clone git@github.com:swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo.git
 ```
-Go to ~/Desktop/ and clone the [https://github.com/swanpyaetun/swan_eks-infrastructure](https://github.com/swanpyaetun/swan_eks-infrastructure) repository.
+Go to ~/Desktop/ and clone the [https://github.com/swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo](https://github.com/swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo) repository.
 <br><br>
 
 ```bash
-cd ~/Desktop/swan_eks-infrastructure/swan_terraform/swan_environments/swan_prerequisites/
+cd ~/Desktop/swan_eks-infrastructure-for-opentelemetry-demo/swan_terraform/swan_environments/swan_prerequisites/
 ```
-Go to ~/Desktop/swan_eks-infrastructure/swan_terraform/swan_environments/swan_prerequisites/ directory.
+Go to ~/Desktop/swan_eks-infrastructure-for-opentelemetry-demo/swan_terraform/swan_environments/swan_prerequisites/ directory.
 <br><br>
 
 ```hcl
@@ -51,9 +51,9 @@ Run this command.
 ```bash
 terraform apply -auto-approve -var-file=prerequisites.tfvars
 ```
-Run this command to create AWS resources required for swanpyaetun/swan_eks-infrastructure project, and swanpyaetun/swan_polyglot-microservices-application project.<br>
-S3 bucket and CI IAM role are created for swanpyaetun/swan_eks-infrastructure project.<br>
-CI IAM role, private ECR repositories, and ACM certificate are created for swanpyaetun/swan_polyglot-microservices-application project.
+Run this command to create AWS resources required for swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo project, and swanpyaetun/swan_opentelemetry-demo project.<br>
+S3 bucket and CI IAM role are created for swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo project.<br>
+CI IAM role, private ECR repositories, and ACM certificate are created for swanpyaetun/swan_opentelemetry-demo project.
 <br><br>
 
 ```hcl
@@ -89,7 +89,7 @@ aws iam get-role --role-name swan_githubactions_terraform_iam_role --query 'Role
 ```
 Run this command to get "swan_githubactions_terraform_iam_role" arn.
 
-In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Security and quality -> Secrets and variables -> Actions.<br>
+In swanpyaetun/swan_eks-infrastructure-for-opentelemetry-demo repository, go to "Settings" -> Security and quality -> Secrets and variables -> Actions.<br>
 Create a new repository secret:<br>
 Name: SWAN_CI_IAM_ROLE_ARN<br>
 Secret: "swan_githubactions_terraform_iam_role" arn

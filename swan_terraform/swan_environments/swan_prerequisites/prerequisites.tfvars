@@ -2,7 +2,7 @@
 swan_s3_bucket_name = "swan-terraform-backend"
 
 # swan_ecr
-swan_private_ecr_namespace = "swan_polyglot-microservices-application"
+swan_private_ecr_namespace = "swan_opentelemetry-demo"
 swan_private_ecr_repository_names = [
   "accounting",
   "ad",
