@@ -89,7 +89,7 @@ aws iam get-role --role-name swan_githubactions_terraform_iam_role --query 'Role
 ```
 Run this command to get "swan_githubactions_terraform_iam_role" arn.
 
-In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Secrets and variables -> Actions.<br>
+In swanpyaetun/swan_eks-infrastructure repository, go to "Settings" -> Security and quality -> Secrets and variables -> Actions.<br>
 Create a new repository secret:<br>
 Name: SWAN_CI_IAM_ROLE_ARN<br>
 Secret: "swan_githubactions_terraform_iam_role" arn
