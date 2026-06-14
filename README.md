@@ -70,10 +70,8 @@
 ## 3. Instructions
 
 Run "Provision AWS Infrastructure with Terraform" pipeline to create EKS Infrastructure.<br>
-"Provision AWS Infrastructure with Terraform" pipeline can be triggered in 3 ways:
-1. The CI/CD pipeline runs when a pull request is opened against the main branch.
-2. The CI/CD pipeline runs when a direct push is made to the main branch.
-3. The CI/CD pipeline runs when a user manually triggers it.
+"Provision AWS Infrastructure with Terraform" pipeline can be triggered in 1 way:
+1. The CI/CD pipeline runs when a user manually triggers it.
 <br>
 
 Run "Terraform Destroy" pipeline to destroy EKS Infrastructure.<br>

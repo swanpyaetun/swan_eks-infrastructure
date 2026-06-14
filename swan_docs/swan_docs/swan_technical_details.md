@@ -231,10 +231,8 @@ The private subnets tag "kubernetes.io/role/internal-elb" signals AWS Load Balan
 
 ### 3.1. .github/workflows/swan_terraform.yml
 
-"Provision AWS Infrastructure with Terraform" pipeline can be triggered in 3 ways:
-1. The CI/CD pipeline runs when a pull request is opened against the main branch.
-2. The CI/CD pipeline runs when a direct push is made to the main branch.
-3. The CI/CD pipeline runs when a user manually triggers it.
+"Provision AWS Infrastructure with Terraform" pipeline can be triggered in 1 way:
+1. The CI/CD pipeline runs when a user manually triggers it.
 
 swan_terraform_plan job does the following steps:
 1. checkout repository
@@ -244,9 +242,9 @@ swan_terraform_plan job does the following steps:
 5. check Terraform format
 6. check whether the configuration is valid
 7. terraform plan and generate Terraform plan file
-8. upload Terraform plan file only if the event is push or manually triggered
+8. upload Terraform plan file
 
-swan_terraform_apply job runs after swan_terraform_plan job succeeds. swan_terraform_apply job runs only if the event is push or manually triggered. swan_terraform_apply job does the following steps:
+swan_terraform_apply job runs after swan_terraform_plan job succeeds. swan_terraform_apply job does the following steps:
 1. checkout repository
 2. set up Terraform in the runner
 3. configure AWS credentials using OIDC
